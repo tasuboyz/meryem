@@ -1,165 +1,281 @@
-// Gestione Portfolio
+// Portfolio Manager
 class PortfolioManager {
     constructor() {
-        this.currentFilter = 'all';
         this.portfolioGrid = document.getElementById('portfolio-grid');
-        this.filterBtns = document.querySelectorAll('.filter-btn');
+        this.filterButtons = document.querySelectorAll('.filter-btn');
         this.modal = document.getElementById('portfolio-modal');
+        this.modalOverlay = this.modal?.querySelector('.modal-overlay');
+        this.modalClose = this.modal?.querySelector('.modal-close');
+        this.currentFilter = 'all';
+        this.portfolioItems = [];
         
         this.init();
     }
 
     init() {
-        this.renderPortfolioItems();
-        this.setupFilterButtons();
-        this.setupModal();
+        this.createPortfolioItems();
+        this.bindEvents();
+        this.setupIntersectionObserver();
     }
 
-    renderPortfolioItems() {
+    createPortfolioItems() {
         if (!this.portfolioGrid) return;
 
         this.portfolioGrid.innerHTML = '';
-
+        
         portfolioData.forEach(item => {
-            const portfolioItem = this.createPortfolioItem(item);
+            const portfolioItem = this.createPortfolioCard(item);
             this.portfolioGrid.appendChild(portfolioItem);
+            this.portfolioItems.push(portfolioItem);
         });
     }
 
-    createPortfolioItem(item) {
-        const article = document.createElement('article');
-        article.className = `portfolio-item ${item.category}`;
-        article.setAttribute('data-category', item.category);
-        article.setAttribute('data-id', item.id);
+    createPortfolioCard(item) {
+        const card = document.createElement('div');
+        card.className = `portfolio-item fade-in-up`;
+        card.dataset.category = item.category;
+        card.dataset.id = item.id;
 
-        article.innerHTML = `
+        // Determina l'icona in base alla categoria
+        let categoryIcon = '';
+        switch(item.category) {
+            case 'rendering':
+                categoryIcon = '🏢';
+                break;
+            case 'padiglioni':
+                categoryIcon = '🎪';
+                break;
+            case '3d':
+                categoryIcon = '🎨';
+                break;
+            default:
+                categoryIcon = '📐';
+        }
+
+        card.innerHTML = `
             <div class="portfolio-image">
-                <div class="placeholder-image">
-                    <i class="fas fa-image"></i>
-                    <p>Immagine Progetto</p>
+                <div class="image-placeholder-portfolio">
+                    <span class="icon">${categoryIcon}</span>
+                    <span class="text">Immagine progetto</span>
                 </div>
                 <div class="portfolio-overlay">
-                    <i class="fas fa-eye"></i>
+                    <div class="overlay-content">
+                        <span class="overlay-icon">👁️</span>
+                        <span class="overlay-text">Visualizza Dettagli</span>
+                    </div>
                 </div>
             </div>
-            <div class="portfolio-content">
+            <div class="portfolio-info">
                 <h3>${item.title}</h3>
-                <p>${item.description}</p>
+                <div class="portfolio-category">${this.getCategoryName(item.category)}</div>
+                <p class="portfolio-description">${item.description}</p>
                 <div class="portfolio-tags">
-                    ${item.tags.map(tag => `<span class="portfolio-tag">${tag}</span>`).join('')}
+                    ${item.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
                 </div>
             </div>
         `;
 
-        // Aggiungi event listener per aprire modal
-        article.addEventListener('click', () => this.openModal(item));
-
-        return article;
+        return card;
     }
 
-    setupFilterButtons() {
-        this.filterBtns.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                
-                // Rimuovi active da tutti i bottoni
-                this.filterBtns.forEach(b => b.classList.remove('active'));
-                
-                // Aggiungi active al bottone cliccato
-                btn.classList.add('active');
-                
-                // Ottieni categoria filtro
-                const filter = btn.getAttribute('data-filter');
+    getCategoryName(category) {
+        return portfolioCategories[category] || category;
+    }
+
+    bindEvents() {
+        // Filter buttons
+        this.filterButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                const filter = e.target.dataset.filter;
                 this.filterPortfolio(filter);
+                this.updateActiveFilter(e.target);
             });
         });
-    }
 
-    filterPortfolio(category) {
-        this.currentFilter = category;
-        const portfolioItems = document.querySelectorAll('.portfolio-item');
-
-        portfolioItems.forEach(item => {
-            const itemCategory = item.getAttribute('data-category');
-            
-            if (category === 'all' || itemCategory === category) {
-                item.classList.remove('hidden');
-                item.style.animation = 'fadeIn 0.5s ease';
-            } else {
-                item.classList.add('hidden');
-            }
-        });
-    }
-
-    setupModal() {
-        if (!this.modal) return;
-
-        const closeBtn = this.modal.querySelector('.modal-close');
-        
-        // Chiudi modal cliccando la X
-        closeBtn.addEventListener('click', () => this.closeModal());
-        
-        // Chiudi modal cliccando fuori dal contenuto
-        this.modal.addEventListener('click', (e) => {
-            if (e.target === this.modal) {
-                this.closeModal();
+        // Portfolio items click
+        this.portfolioGrid?.addEventListener('click', (e) => {
+            const portfolioItem = e.target.closest('.portfolio-item');
+            if (portfolioItem) {
+                const itemId = parseInt(portfolioItem.dataset.id);
+                this.openModal(itemId);
             }
         });
 
-        // Chiudi modal con ESC
+        // Modal events
+        this.modalClose?.addEventListener('click', () => this.closeModal());
+        this.modalOverlay?.addEventListener('click', () => this.closeModal());
+        
+        // Keyboard events
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && this.modal.classList.contains('show')) {
+            if (e.key === 'Escape' && this.modal?.classList.contains('active')) {
                 this.closeModal();
             }
         });
     }
 
-    openModal(item) {
-        if (!this.modal) return;
+    filterPortfolio(filter) {
+        this.currentFilter = filter;
+        
+        this.portfolioItems.forEach((item, index) => {
+            const shouldShow = filter === 'all' || item.dataset.category === filter;
+            
+            if (shouldShow) {
+                setTimeout(() => {
+                    item.style.display = 'block';
+                    item.style.opacity = '0';
+                    item.style.transform = 'translateY(20px)';
+                    
+                    requestAnimationFrame(() => {
+                        item.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+                        item.style.opacity = '1';
+                        item.style.transform = 'translateY(0)';
+                    });
+                }, index * 50);
+            } else {
+                item.style.transition = 'all 0.3s ease-out';
+                item.style.opacity = '0';
+                item.style.transform = 'translateY(-20px)';
+                
+                setTimeout(() => {
+                    item.style.display = 'none';
+                }, 300);
+            }
+        });
 
+        // Show notification
+        this.showFilterNotification();
+    }
+
+    updateActiveFilter(activeButton) {
+        this.filterButtons.forEach(btn => btn.classList.remove('active'));
+        activeButton.classList.add('active');
+    }
+
+    openModal(itemId) {
+        const item = portfolioData.find(p => p.id === itemId);
+        if (!item || !this.modal) return;
+
+        // Populate modal content
+        this.populateModal(item);
+        
+        // Show modal with animation
+        this.modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        
+        requestAnimationFrame(() => {
+            this.modal.classList.add('active');
+        });
+    }
+
+    populateModal(item) {
         const modalImage = document.getElementById('modal-image');
         const modalTitle = document.getElementById('modal-title');
+        const modalCategory = document.getElementById('modal-category');
         const modalDescription = document.getElementById('modal-description');
         const modalTags = document.getElementById('modal-tags');
 
-        // Imposta contenuto modal (per ora placeholder)
-        modalImage.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjQwMCIgdmlld0JveD0iMCAwIDgwMCA0MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI4MDAiIGhlaWdodD0iNDAwIiBmaWxsPSIjRjhGOUZBIi8+CjxwYXRoIGQ9Ik0zNTAgMTcwSDQ1MFYyMzBIMzUwVjE3MFoiIGZpbGw9IiM3RjhDOEQiLz4KPHN2ZyBpZD0iY2FtZXJhIiBzdHJva2U9IiM3RjhDOEQiIGZpbGw9Im5vbmUiIHN0cm9rZS13aWR0aD0iMiIgdmlld0JveD0iMCAwIDI0IDI0IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGhlaWdodD0iNDAiIHdpZHRoPSI0MCI+PHBhdGggZD0ibTkgMTMgMyAzTDIyIDdsMC0zLTMgMEwxMCA5IDkgMTN6bTAtMTNMMSA5IDkgMTNsMy0zTDIyIDdsMC0zLTMgMEwxMCA5IDkgMTN6bTAtMTNMMSA5IDkgMTNsMy0zTDIyIDdsMC0zLTMgMEwxMCA5IDkgMTN6Ii8+PC9zdmc+';
-        modalImage.alt = item.title;
-        modalTitle.textContent = item.title;
-        modalDescription.textContent = item.fullDescription;
-        modalTags.innerHTML = item.tags.map(tag => 
-            `<span class="portfolio-tag">${tag}</span>`
-        ).join('');
+        // Set placeholder image
+        if (modalImage) {
+            modalImage.style.display = 'none';
+            modalImage.parentElement.innerHTML = `
+                <div class="image-placeholder-portfolio" style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; background: var(--background-dark);">
+                    <span class="icon" style="font-size: 64px; margin-bottom: 15px;">${this.getCategoryIcon(item.category)}</span>
+                    <span class="text" style="color: var(--text-muted);">Immagine del progetto</span>
+                </div>
+            `;
+        }
 
-        this.modal.classList.add('show');
-        document.body.style.overflow = 'hidden';
+        if (modalTitle) modalTitle.textContent = item.title;
+        if (modalCategory) modalCategory.textContent = this.getCategoryName(item.category);
+        if (modalDescription) modalDescription.textContent = item.fullDescription || item.description;
+        
+        if (modalTags) {
+            modalTags.innerHTML = item.tags.map(tag => 
+                `<span class="tag">${tag}</span>`
+            ).join('');
+        }
+    }
+
+    getCategoryIcon(category) {
+        switch(category) {
+            case 'rendering': return '🏢';
+            case 'padiglioni': return '🎪';
+            case '3d': return '🎨';
+            default: return '📐';
+        }
     }
 
     closeModal() {
-        this.modal.classList.remove('show');
+        if (!this.modal) return;
+
+        this.modal.classList.remove('active');
         document.body.style.overflow = 'auto';
+        
+        setTimeout(() => {
+            this.modal.style.display = 'none';
+        }, 300);
     }
 
-    // Metodo per aggiungere nuovi progetti (per uso futuro)
+    showFilterNotification() {
+        if (typeof showNotification === 'function') {
+            const categoryName = this.getCategoryName(this.currentFilter);
+            const message = this.currentFilter === 'all' 
+                ? 'Visualizzazione di tutti i progetti'
+                : `Filtrato per categoria: ${categoryName}`;
+            
+            showNotification(message, 'success');
+        }
+    }
+
+    setupIntersectionObserver() {
+        if (!window.IntersectionObserver) return;
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate');
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        });
+
+        this.portfolioItems.forEach(item => {
+            observer.observe(item);
+        });
+    }
+
+    // Public methods for external use
     addProject(projectData) {
         portfolioData.push({
             id: portfolioData.length + 1,
             ...projectData
         });
-        this.renderPortfolioItems();
+        this.createPortfolioItems();
     }
 
-    // Metodo per rimuovere progetti (per uso futuro)
     removeProject(projectId) {
-        const index = portfolioData.findIndex(item => item.id === projectId);
+        const index = portfolioData.findIndex(p => p.id === projectId);
         if (index > -1) {
             portfolioData.splice(index, 1);
-            this.renderPortfolioItems();
+            this.createPortfolioItems();
         }
+    }
+
+    getFilteredProjects() {
+        return this.currentFilter === 'all' 
+            ? portfolioData 
+            : portfolioData.filter(p => p.category === this.currentFilter);
     }
 }
 
-// Inizializza il portfolio manager quando il DOM è caricato
+// Initialize Portfolio Manager when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    new PortfolioManager();
+    window.portfolioManager = new PortfolioManager();
 });
+
+// Export for use in other modules
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = PortfolioManager;
+}

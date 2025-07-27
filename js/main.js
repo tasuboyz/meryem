@@ -1,80 +1,176 @@
-// Script principale per il portfolio
-class PortfolioApp {
+// Main Application Manager
+class App {
     constructor() {
         this.init();
     }
 
     init() {
+        this.setupParticles();
+        this.setupAnimations();
         this.setupContactForm();
-        this.setupIntersectionObserver();
-        this.setupScrollToTop();
-        this.loadSiteData();
+        this.setupNotifications();
+        this.setupThemeEffects();
+        this.addEventListeners();
     }
 
-    // Gestione form di contatto
-    setupContactForm() {
-        const contactForm = document.getElementById('contact-form');
-        if (!contactForm) return;
+    setupParticles() {
+        const particlesContainer = document.getElementById('particles');
+        if (!particlesContainer) return;
 
-        contactForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            this.handleContactForm(contactForm);
+        // Create particles
+        for (let i = 0; i < particlesConfig.count; i++) {
+            this.createParticle(particlesContainer);
+        }
+    }
+
+    createParticle(container) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+
+        // Random properties
+        const size = Math.random() * (particlesConfig.size.max - particlesConfig.size.min) + particlesConfig.size.min;
+        const x = Math.random() * 100;
+        const y = Math.random() * 100;
+        const opacity = Math.random() * (particlesConfig.opacity.max - particlesConfig.opacity.min) + particlesConfig.opacity.min;
+        const duration = Math.random() * 4 + 4; // 4-8 seconds
+
+        particle.style.cssText = `
+            width: ${size}px;
+            height: ${size}px;
+            left: ${x}%;
+            top: ${y}%;
+            opacity: ${opacity};
+            animation-duration: ${duration}s;
+            animation-delay: ${Math.random() * 2}s;
+        `;
+
+        container.appendChild(particle);
+    }
+
+    setupAnimations() {
+        // Intersection Observer for scroll animations
+        if (!window.IntersectionObserver) return;
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    this.animateElement(entry.target);
+                }
+            });
+        }, {
+            threshold: animationConfig.threshold,
+            rootMargin: '0px 0px -50px 0px'
+        });
+
+        // Observe all animatable elements
+        const animatableElements = document.querySelectorAll('.fade-in-up, .fade-in-left, .fade-in-right, .fade-in-scale');
+        animatableElements.forEach(el => observer.observe(el));
+    }
+
+    animateElement(element) {
+        const animationType = this.getAnimationType(element);
+        const delay = element.dataset.delay || 0;
+
+        setTimeout(() => {
+            element.classList.add('animate');
+            
+            if (animationType === 'stagger') {
+                this.staggerChildAnimations(element);
+            }
+        }, delay);
+    }
+
+    getAnimationType(element) {
+        if (element.classList.contains('fade-in-up')) return 'up';
+        if (element.classList.contains('fade-in-left')) return 'left';
+        if (element.classList.contains('fade-in-right')) return 'right';
+        if (element.classList.contains('fade-in-scale')) return 'scale';
+        return 'default';
+    }
+
+    staggerChildAnimations(container) {
+        const children = container.children;
+        Array.from(children).forEach((child, index) => {
+            setTimeout(() => {
+                child.classList.add('animate');
+            }, index * 100);
         });
     }
 
-    handleContactForm(form) {
-        const formData = new FormData(form);
-        const data = {
-            name: formData.get('name'),
-            email: formData.get('email'),
-            subject: formData.get('subject'),
-            message: formData.get('message')
-        };
+    setupContactForm() {
+        const form = document.getElementById('contact-form');
+        if (!form) return;
 
-        // Validazione base
-        if (!this.validateContactForm(data)) {
-            this.showNotification('Per favore compila tutti i campi.', 'error');
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            this.handleFormSubmission(form);
+        });
+
+        // Real-time validation
+        const inputs = form.querySelectorAll('input, textarea');
+        inputs.forEach(input => {
+            input.addEventListener('blur', () => this.validateField(input));
+            input.addEventListener('input', () => this.clearFieldError(input));
+        });
+    }
+
+    handleFormSubmission(form) {
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const formData = new FormData(form);
+        
+        // Validate form
+        if (!this.validateForm(form)) {
+            this.showNotification(notificationMessages.error.validation, 'error');
             return;
         }
 
-        // Invio email tramite EmailJS
-        this.sendEmailJS(data, form);
-    }
+        // Show loading state
+        this.setFormLoading(submitBtn, true);
 
-    sendEmailJS(data, form) {
-        // Sostituisci con i tuoi parametri EmailJS
-        const serviceID = 'service_84fbmlh'; // Service ID fornito
-        const templateID = 'template_4ayzqcf';
-
-        // Mostra loading
-        const submitBtn = form.querySelector('button[type="submit"]');
-        const originalText = submitBtn.textContent;
-        submitBtn.textContent = 'Invio in corso...';
-        submitBtn.disabled = true;
-
-        emailjs.send(serviceID, templateID, {
-            from_name: data.name,
-            from_email: data.email,
-            subject: data.subject,
-            message: data.message
-        })
-        .then(() => {
-            this.showNotification('Messaggio inviato con successo! Ti risponderò presto.', 'success');
+        // Simulate form submission (replace with actual implementation)
+        setTimeout(() => {
+            this.setFormLoading(submitBtn, false);
+            this.showNotification(notificationMessages.success.form, 'success');
             form.reset();
-            submitBtn.textContent = originalText;
-            submitBtn.disabled = false;
-        })
-        .catch((error) => {
-            this.showNotification('Errore nell\'invio. Riprova più tardi.', 'error');
-            submitBtn.textContent = originalText;
-            submitBtn.disabled = false;
-            console.error('EmailJS error:', error);
-        });
+            this.clearFormValidation(form);
+        }, 2000);
     }
 
-    validateContactForm(data) {
-        return data.name && data.email && data.subject && data.message && 
-               this.isValidEmail(data.email);
+    validateForm(form) {
+        const inputs = form.querySelectorAll('input[required], textarea[required]');
+        let isValid = true;
+
+        inputs.forEach(input => {
+            if (!this.validateField(input)) {
+                isValid = false;
+            }
+        });
+
+        return isValid;
+    }
+
+    validateField(field) {
+        const value = field.value.trim();
+        const type = field.type;
+        let isValid = true;
+        let errorMessage = '';
+
+        // Required validation
+        if (field.hasAttribute('required') && !value) {
+            isValid = false;
+            errorMessage = 'Questo campo è obbligatorio';
+        }
+
+        // Email validation
+        if (type === 'email' && value && !this.isValidEmail(value)) {
+            isValid = false;
+            errorMessage = 'Inserisci un indirizzo email valido';
+        }
+
+        // Update field appearance
+        this.updateFieldValidation(field, isValid, errorMessage);
+
+        return isValid;
     }
 
     isValidEmail(email) {
@@ -82,272 +178,294 @@ class PortfolioApp {
         return emailRegex.test(email);
     }
 
-    simulateEmailSending(data) {
-        // Mostra loading
-        const submitBtn = document.querySelector('#contact-form button[type="submit"]');
-        const originalText = submitBtn.textContent;
-        submitBtn.textContent = 'Invio in corso...';
-        submitBtn.disabled = true;
+    updateFieldValidation(field, isValid, errorMessage) {
+        const formGroup = field.closest('.form-group');
+        if (!formGroup) return;
 
-        // Simula delay di invio
-        setTimeout(() => {
-            this.showNotification('Messaggio inviato con successo! Ti risponderò presto.', 'success');
-            document.getElementById('contact-form').reset();
-            
-            // Ripristina pulsante
-            submitBtn.textContent = originalText;
-            submitBtn.disabled = false;
-        }, 2000);
-    }
+        // Remove existing error elements
+        const existingError = formGroup.querySelector('.field-error');
+        if (existingError) {
+            existingError.remove();
+        }
 
-    showNotification(message, type = 'info') {
-        // Crea elemento notifica
-        const notification = document.createElement('div');
-        notification.className = `notification notification-${type}`;
-        notification.innerHTML = `
-            <span>${message}</span>
-            <button class="notification-close">&times;</button>
-        `;
+        // Update field classes
+        field.classList.toggle('error', !isValid);
+        field.classList.toggle('valid', isValid && field.value.trim());
 
-        // Aggiungi stili inline per la notifica
-        notification.style.cssText = `
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px 20px;
-            border-radius: 5px;
-            color: white;
-            z-index: 10000;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            max-width: 400px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-            animation: slideInNotification 0.3s ease;
-            ${type === 'success' ? 'background: #27ae60;' : ''}
-            ${type === 'error' ? 'background: #e74c3c;' : ''}
-            ${type === 'info' ? 'background: #3498db;' : ''}
-        `;
-
-        // Aggiungi stili per il pulsante di chiusura
-        const closeBtn = notification.querySelector('.notification-close');
-        closeBtn.style.cssText = `
-            background: none;
-            border: none;
-            color: white;
-            font-size: 20px;
-            cursor: pointer;
-            padding: 0;
-            margin-left: auto;
-        `;
-
-        document.body.appendChild(notification);
-
-        // Gestisci chiusura
-        closeBtn.addEventListener('click', () => {
-            notification.remove();
-        });
-
-        // Auto-rimozione dopo 5 secondi
-        setTimeout(() => {
-            if (notification.parentNode) {
-                notification.remove();
-            }
-        }, 5000);
-    }
-
-    // Intersection Observer per animazioni
-    setupIntersectionObserver() {
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('animate-in');
-                }
-            });
-        }, observerOptions);
-
-        // Osserva elementi che devono essere animati
-        const animateElements = document.querySelectorAll(
-            '.service-card, .portfolio-item, .skill-item, .contact-item'
-        );
-
-        animateElements.forEach(el => {
-            el.style.opacity = '0';
-            el.style.transform = 'translateY(30px)';
-            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-            observer.observe(el);
-        });
-
-        // Aggiungi stili per l'animazione
-        const style = document.createElement('style');
-        style.textContent = `
-            .animate-in {
-                opacity: 1 !important;
-                transform: translateY(0) !important;
-            }
-            
-            @keyframes slideInNotification {
-                from {
-                    transform: translateX(100%);
-                    opacity: 0;
-                }
-                to {
-                    transform: translateX(0);
-                    opacity: 1;
-                }
-            }
-        `;
-        document.head.appendChild(style);
-    }
-
-    // Scroll to top functionality
-    setupScrollToTop() {
-        // Crea pulsante scroll to top
-        const scrollTopBtn = document.createElement('button');
-        scrollTopBtn.innerHTML = '<i class="fas fa-chevron-up"></i>';
-        scrollTopBtn.className = 'scroll-top-btn';
-        scrollTopBtn.setAttribute('aria-label', 'Torna in cima');
-        
-        // Stili per il pulsante
-        scrollTopBtn.style.cssText = `
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 50px;
-            height: 50px;
-            border: none;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            font-size: 20px;
-            cursor: pointer;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-            transition: all 0.3s ease;
-            opacity: 0;
-            visibility: hidden;
-            z-index: 1000;
-        `;
-
-        document.body.appendChild(scrollTopBtn);
-
-        // Mostra/nascondi pulsante in base allo scroll
-        window.addEventListener('scroll', () => {
-            if (window.pageYOffset > 300) {
-                scrollTopBtn.style.opacity = '1';
-                scrollTopBtn.style.visibility = 'visible';
-            } else {
-                scrollTopBtn.style.opacity = '0';
-                scrollTopBtn.style.visibility = 'hidden';
-            }
-        });
-
-        // Gestisci click
-        scrollTopBtn.addEventListener('click', () => {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        });
-
-        // Hover effect
-        scrollTopBtn.addEventListener('mouseenter', () => {
-            scrollTopBtn.style.transform = 'scale(1.1)';
-        });
-
-        scrollTopBtn.addEventListener('mouseleave', () => {
-            scrollTopBtn.style.transform = 'scale(1)';
-        });
-    }
-
-    // Carica dati del sito dalla configurazione
-    loadSiteData() {
-        if (typeof siteConfig !== 'undefined') {
-            // Aggiorna titoli e informazioni di contatto
-            document.title = `${siteConfig.companyName} - ${siteConfig.tagline}`;
-            
-            // Aggiorna informazioni di contatto
-            const emailElements = document.querySelectorAll('[data-email]');
-            emailElements.forEach(el => el.textContent = siteConfig.email);
-            
-            const phoneElements = document.querySelectorAll('[data-phone]');
-            phoneElements.forEach(el => el.textContent = siteConfig.phone);
-            
-            const locationElements = document.querySelectorAll('[data-location]');
-            locationElements.forEach(el => el.textContent = siteConfig.location);
+        // Add error message if needed
+        if (!isValid && errorMessage) {
+            const errorElement = document.createElement('div');
+            errorElement.className = 'field-error';
+            errorElement.textContent = errorMessage;
+            errorElement.style.cssText = `
+                color: #f44336;
+                font-size: 12px;
+                margin-top: 5px;
+                animation: slideInUp 0.3s ease-out;
+            `;
+            formGroup.appendChild(errorElement);
         }
     }
 
-    // Utility per lazy loading delle immagini (per uso futuro)
-    setupLazyLoading() {
-        const images = document.querySelectorAll('img[data-src]');
+    clearFieldError(field) {
+        field.classList.remove('error');
+        const formGroup = field.closest('.form-group');
+        const errorElement = formGroup?.querySelector('.field-error');
+        if (errorElement) {
+            errorElement.remove();
+        }
+    }
+
+    clearFormValidation(form) {
+        const fields = form.querySelectorAll('input, textarea');
+        fields.forEach(field => {
+            field.classList.remove('error', 'valid');
+            this.clearFieldError(field);
+        });
+    }
+
+    setFormLoading(button, isLoading) {
+        const span = button.querySelector('span');
+        const loader = button.querySelector('.btn-loader');
+
+        button.disabled = isLoading;
+        button.classList.toggle('loading', isLoading);
+
+        if (span) {
+            span.textContent = isLoading ? 'Invio in corso...' : 'Invia Messaggio';
+        }
+    }
+
+    setupNotifications() {
+        this.notificationContainer = document.getElementById('notification');
+        this.notificationQueue = [];
+        this.isShowingNotification = false;
+    }
+
+    showNotification(message, type = 'success', duration = 4000) {
+        this.notificationQueue.push({ message, type, duration });
         
-        const imageObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const img = entry.target;
-                    img.src = img.dataset.src;
-                    img.classList.remove('lazy');
-                    imageObserver.unobserve(img);
-                }
+        if (!this.isShowingNotification) {
+            this.processNotificationQueue();
+        }
+    }
+
+    processNotificationQueue() {
+        if (this.notificationQueue.length === 0) {
+            this.isShowingNotification = false;
+            return;
+        }
+
+        this.isShowingNotification = true;
+        const { message, type, duration } = this.notificationQueue.shift();
+        
+        this.displayNotification(message, type, duration);
+    }
+
+    displayNotification(message, type, duration) {
+        if (!this.notificationContainer) return;
+
+        const messageElement = this.notificationContainer.querySelector('.notification-message');
+        const closeButton = this.notificationContainer.querySelector('.notification-close');
+
+        // Set content
+        messageElement.textContent = message;
+        
+        // Set type
+        this.notificationContainer.className = `notification ${type}`;
+        
+        // Show notification
+        this.notificationContainer.classList.add('show');
+
+        // Auto hide
+        const hideTimeout = setTimeout(() => {
+            this.hideNotification();
+        }, duration);
+
+        // Close button handler
+        const closeHandler = () => {
+            clearTimeout(hideTimeout);
+            this.hideNotification();
+        };
+
+        closeButton.onclick = closeHandler;
+
+        // Store timeout for cleanup
+        this.notificationContainer.dataset.timeout = hideTimeout;
+    }
+
+    hideNotification() {
+        if (!this.notificationContainer) return;
+
+        this.notificationContainer.classList.remove('show');
+        
+        setTimeout(() => {
+            this.processNotificationQueue();
+        }, 300);
+    }
+
+    setupThemeEffects() {
+        // Add glow effects on hover
+        this.setupGlowEffects();
+        
+        // Setup background gradients
+        this.setupBackgroundEffects();
+        
+        // Setup cursor effects
+        this.setupCursorEffects();
+    }
+
+    setupGlowEffects() {
+        const glowElements = document.querySelectorAll('.btn-primary, .service-card, .portfolio-item');
+        
+        glowElements.forEach(element => {
+            element.addEventListener('mouseenter', (e) => {
+                this.addGlowEffect(e.target);
+            });
+            
+            element.addEventListener('mouseleave', (e) => {
+                this.removeGlowEffect(e.target);
             });
         });
-
-        images.forEach(img => imageObserver.observe(img));
     }
 
-    // Gestione tema scuro/chiaro (feature futura)
-    setupThemeToggle() {
-        const themeToggle = document.querySelector('.theme-toggle');
-        if (!themeToggle) return;
+    addGlowEffect(element) {
+        element.style.boxShadow = '0 0 30px rgba(202, 174, 77, 0.4)';
+        element.style.borderColor = 'var(--primary-color)';
+    }
 
-        const currentTheme = localStorage.getItem('theme') || 'light';
-        document.documentElement.setAttribute('data-theme', currentTheme);
+    removeGlowEffect(element) {
+        element.style.boxShadow = '';
+        element.style.borderColor = '';
+    }
 
-        themeToggle.addEventListener('click', () => {
-            const theme = document.documentElement.getAttribute('data-theme');
-            const newTheme = theme === 'light' ? 'dark' : 'light';
-            
-            document.documentElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
+    setupBackgroundEffects() {
+        // Parallax effect for hero section
+        window.addEventListener('scroll', () => {
+            this.updateParallaxEffect();
         });
     }
 
-    // Performance monitoring (opzionale)
-    setupPerformanceMonitoring() {
-        // Monitora performance di caricamento
+    updateParallaxEffect() {
+        const scrolled = window.pageYOffset;
+        const parallaxElements = document.querySelectorAll('.hero-background');
+        
+        parallaxElements.forEach(element => {
+            const speed = 0.5;
+            element.style.transform = `translateY(${scrolled * speed}px)`;
+        });
+    }
+
+    setupCursorEffects() {
+        // Create custom cursor for interactive elements
+        const interactiveElements = document.querySelectorAll('a, button, .portfolio-item, .service-card');
+        
+        interactiveElements.forEach(element => {
+            element.addEventListener('mouseenter', () => {
+                document.body.style.cursor = 'pointer';
+            });
+            
+            element.addEventListener('mouseleave', () => {
+                document.body.style.cursor = 'default';
+            });
+        });
+    }
+
+    addEventListeners() {
+        // Performance optimization
         window.addEventListener('load', () => {
-            const perfData = performance.getEntriesByType('navigation')[0];
-            const loadTime = perfData.loadEventEnd - perfData.loadEventStart;
-            
-            console.log(`Page load time: ${loadTime}ms`);
-            
-            // Invia dati analytics se necessario
-            if (loadTime > 3000) {
-                console.warn('Page load time is slow');
-            }
+            this.onPageLoad();
+        });
+
+        // Handle resize events
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                this.onResize();
+            }, 250);
+        });
+
+        // Handle visibility change
+        document.addEventListener('visibilitychange', () => {
+            this.onVisibilityChange();
+        });
+    }
+
+    onPageLoad() {
+        // Page loaded optimizations
+        document.body.classList.add('loaded');
+        
+        // Start hero animations
+        this.startHeroAnimations();
+    }
+
+    startHeroAnimations() {
+        const heroElements = document.querySelectorAll('.hero .fade-in-up, .hero .fade-in-right');
+        heroElements.forEach((element, index) => {
+            setTimeout(() => {
+                element.classList.add('animate');
+            }, index * 200);
+        });
+    }
+
+    onResize() {
+        // Handle responsive changes
+        this.updateLayout();
+    }
+
+    updateLayout() {
+        // Recalculate positions if needed
+        if (window.portfolioManager) {
+            window.portfolioManager.updateLayout?.();
+        }
+    }
+
+    onVisibilityChange() {
+        if (document.hidden) {
+            // Page is hidden, pause animations
+            this.pauseAnimations();
+        } else {
+            // Page is visible, resume animations
+            this.resumeAnimations();
+        }
+    }
+
+    pauseAnimations() {
+        const particles = document.querySelectorAll('.particle');
+        particles.forEach(particle => {
+            particle.style.animationPlayState = 'paused';
+        });
+    }
+
+    resumeAnimations() {
+        const particles = document.querySelectorAll('.particle');
+        particles.forEach(particle => {
+            particle.style.animationPlayState = 'running';
         });
     }
 }
 
-// Inizializza l'applicazione
+// Utility functions
+window.showNotification = function(message, type = 'success', duration = 4000) {
+    if (window.app) {
+        window.app.showNotification(message, type, duration);
+    }
+};
+
+window.scrollToTop = function() {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+};
+
+// Initialize app when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    new PortfolioApp();
+    window.app = new App();
 });
 
-// Service Worker registration (per PWA future)
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js')
-            .then(registration => {
-                console.log('SW registered: ', registration);
-            })
-            .catch(registrationError => {
-                console.log('SW registration failed: ', registrationError);
-            });
-    });
+// Export for use in other modules
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = App;
 }
