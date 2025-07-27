@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio - Rendering & Padiglioni</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>Portfolio</h2>
+            </div>
+            <div class="nav-menu" id="nav-menu">
+                <a href="#home" class="nav-link">Home</a>
+                <a href="#about" class="nav-link">Chi Sono</a>
+                <a href="#services" class="nav-link">Servizi</a>
+                <a href="#portfolio" class="nav-link">Portfolio</a>
+                <a href="#contact" class="nav-link">Contatti</a>
+            </div>
+            <div class="nav-toggle" id="nav-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">Rendering & Padiglioni</h1>
+                <p class="hero-subtitle">Creazioni digitali e architettoniche di alta qualità</p>
+                <p class="hero-description">
+                    Specializzata in rendering fotorealistici e progettazione di padiglioni espositivi.
+                    Trasformo idee in visualizzazioni straordinarie.
+                </p>
+                <div class="hero-buttons">
+                    <a href="#portfolio" class="btn btn-primary">Vedi i Progetti</a>
+                    <a href="#contact" class="btn btn-secondary">Contattami</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="placeholder-image">
+                    <i class="fas fa-cube"></i>
+                    <p>Immagine Hero</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <div class="section-header">
+                <h2>Chi Sono</h2>
+                <p>La mia passione per il design e la visualizzazione</p>
+            </div>
+            <div class="about-content">
+                <div class="about-text">
+                    <h3>La mia storia</h3>
+                    <p>
+                        Con anni di esperienza nel settore del rendering e della progettazione architettonica,
+                        mi dedico alla creazione di visualizzazioni che danno vita ai progetti più ambiziosi.
+                    </p>
+                    <p>
+                        La mia specializzazione comprende rendering fotorealistici per architettura,
+                        design di padiglioni espositivi e visualizzazioni 3D per eventi e manifestazioni.
+                    </p>
+                    <div class="skills">
+                        <div class="skill-item">
+                            <i class="fas fa-palette"></i>
+                            <span>Design Creativo</span>
+                        </div>
+                        <div class="skill-item">
+                            <i class="fas fa-drafting-compass"></i>
+                            <span>Progettazione Tecnica</span>
+                        </div>
+                        <div class="skill-item">
+                            <i class="fas fa-eye"></i>
+                            <span>Visualizzazione 3D</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-image">
+                    <div class="placeholder-image">
+                        <i class="fas fa-user"></i>
+                        <p>Foto Profilo</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="services">
+        <div class="container">
+            <div class="section-header">
+                <h2>I Miei Servizi</h2>
+                <p>Soluzioni professionali per ogni esigenza</p>
+            </div>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <h3>Rendering Architettonici</h3>
+                    <p>Visualizzazioni fotorealistiche di edifici e spazi interni ed esterni</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-store"></i>
+                    </div>
+                    <h3>Padiglioni Espositivi</h3>
+                    <p>Progettazione e visualizzazione di stand e padiglioni per fiere ed eventi</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-cube"></i>
+                    </div>
+                    <h3>Modellazione 3D</h3>
+                    <p>Creazione di modelli tridimensionali dettagliati per ogni tipo di progetto</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-camera"></i>
+                    </div>
+                    <h3>Visualizzazione Prodotti</h3>
+                    <p>Rendering di prodotti industriali e di design per marketing e presentazioni</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section id="portfolio" class="portfolio">
+        <div class="container">
+            <div class="section-header">
+                <h2>Portfolio</h2>
+                <p>I miei lavori più significativi</p>
+            </div>
+            
+            <!-- Portfolio Filter -->
+            <div class="portfolio-filter">
+                <button class="filter-btn active" data-filter="all">Tutti</button>
+                <button class="filter-btn" data-filter="rendering">Rendering</button>
+                <button class="filter-btn" data-filter="padiglioni">Padiglioni</button>
+                <button class="filter-btn" data-filter="3d">Modellazione 3D</button>
+            </div>
+
+            <!-- Portfolio Grid -->
+            <div class="portfolio-grid" id="portfolio-grid">
+                <!-- Portfolio items will be generated by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <div class="section-header">
+                <h2>Contattami</h2>
+                <p>Parliamo del tuo prossimo progetto</p>
+            </div>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h4>Email</h4>
+                            <p>info@portfolio.com</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h4>Telefono</h4>
+                            <p>+39 123 456 7890</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h4>Ubicazione</h4>
+                            <p>Milano, Italia</p>
+                        </div>
+                    </div>
+                </div>
+                <form class="contact-form" id="contact-form">
+                    <div class="form-group">
+                        <input type="text" id="name" name="name" placeholder="Il tuo nome" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" id="email" name="email" placeholder="La tua email" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="subject" name="subject" placeholder="Oggetto" required>
+                    </div>
+                    <div class="form-group">
+                        <textarea id="message" name="message" placeholder="Il tuo messaggio" rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Invia Messaggio</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <h3>Portfolio</h3>
+                    <p>Rendering & Padiglioni di qualità professionale</p>
+                </div>
+                <div class="footer-social">
+                    <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-behance"></i></a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Portfolio. Tutti i diritti riservati.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Portfolio Modal -->
+    <div class="modal" id="portfolio-modal">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <div class="modal-body">
+                <img id="modal-image" src="" alt="">
+                <div class="modal-info">
+                    <h3 id="modal-title"></h3>
+                    <p id="modal-description"></p>
+                    <div class="modal-tags" id="modal-tags"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script type="text/javascript">
+      (function(){
+        emailjs.init({
+          publicKey: "XvtasBZZ6VURVXQAj", // Sostituisci con la tua public key EmailJS
+        });
+      })();
+    </script>
+    <script src="js/data.js"></script>
+    <script src="js/portfolio.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
