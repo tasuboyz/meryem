@@ -1,180 +1,180 @@
-// Configurazione del sito
+// ========================================
+// Site Configuration & Data
+// ========================================
+
 const siteConfig = {
-    companyName: "StudioDesign",
-    email: "info@studiodesign.com",
-    phone: "+39 123 456 7890",
-    location: "Milano, Italia",
-    socialLinks: {
-        facebook: "#",
-        instagram: "#",
-        linkedin: "#",
-        twitter: "#"
+    title: 'StudioDesign',
+    description: 'Portfolio professionale di design architettonico e rendering 3D',
+    author: 'StudioDesign',
+    contact: {
+        email: 'info@studiodesign.it',
+        phone: '+39 XXX XXX XXXX',
+        location: 'Italia'
+    },
+    social: {
+        linkedin: '#',
+        instagram: '#',
+        behance: '#'
     }
 };
 
-// Dati portfolio demo
+// Portfolio Data
 const portfolioData = [
     {
-        id: 1,
-        title: "Villa Moderna - Rendering Esterno",
-        description: "Visualizzazione fotorealistica di villa moderna con piscina e giardino",
-        category: "rendering",
-        tags: ["Architettura", "Esterno", "Fotorealistico", "Villa"],
-        image: "",
-        fullDescription: "Progetto di rendering esterno per una villa moderna di lusso situata in Costa Smeralda. Il progetto include la visualizzazione completa dell'edificio, degli spazi esterni, della piscina infinity e del paesaggio circostante. Particolare attenzione è stata dedicata all'illuminazione naturale e ai materiali utilizzati per creare un risultato fotorealistico che cattura l'essenza del design architettonico contemporaneo.",
-        client: "Studio Architettura XYZ",
-        year: "2024",
-        software: ["3ds Max", "V-Ray", "Photoshop"]
+        id: 'fiera-medica-2024',
+        title: 'Padiglione Fiera Medica Düsseldorf 2024',
+        category: 'fiere',
+        description: 'Progettazione completa di un padiglione espositivo per la fiera medica internazionale di Düsseldorf. Il design combina funzionalità e estetica moderna per creare un ambiente accogliente e professionale.',
+        images: [
+            '2024 per TGS fiera MEDICA A DUSSELDORF/Immagine WhatsApp 2025-07-27 ore 13.26.16_5f3b06d9.jpg',
+            '2024 per TGS fiera MEDICA A DUSSELDORF/Immagine WhatsApp 2025-07-27 ore 13.27.27_dc646595.jpg',
+            '2024 per TGS fiera MEDICA A DUSSELDORF/Immagine WhatsApp 2025-07-27 ore 13.27.38_ab90a085.jpg',
+            '2024 per TGS fiera MEDICA A DUSSELDORF/Immagine WhatsApp 2025-07-27 ore 13.30.01_9d77ef16.jpg',
+            '2024 per TGS fiera MEDICA A DUSSELDORF/Immagine WhatsApp 2025-07-27 ore 13.30.30_cd9561ed.jpg',
+            '2024 per TGS fiera MEDICA A DUSSELDORF/Immagine WhatsApp 2025-07-27 ore 13.31.04_8e4bad07.jpg'
+        ],
+        coverImage: '2024 per TGS fiera MEDICA A DUSSELDORF/Immagine WhatsApp 2025-07-27 ore 13.26.16_5f3b06d9.jpg',
+        year: '2024',
+        client: 'TGS',
+        location: 'Düsseldorf, Germania',
+        details: {
+            superficie: '120 mq',
+            tipologia: 'Padiglione Espositivo',
+            settore: 'Medicale',
+            servizi: ['Concept Design', 'Progettazione Tecnica', 'Rendering 3D', 'Supervisione Realizzazione']
+        }
     },
     {
-        id: 2,
-        title: "Appartamento di Lusso - Interni",
-        description: "Rendering d'interni per appartamento di lusso nel centro di Milano",
-        category: "rendering",
-        tags: ["Interni", "Lusso", "Design", "Milano"],
-        image: "",
-        fullDescription: "Progetto di interior design per un appartamento di 200mq nel quadrilatero della moda di Milano. Il rendering comprende soggiorno, cucina, camera da letto master e bagno principale. Lo stile contemporaneo si fonde con elementi classici per creare un ambiente sofisticato e accogliente. Utilizzo di materiali pregiati come marmo Calacatta, parquet in noce americano e complementi d'arredo di design italiano.",
-        client: "Interior Design Studio ABC",
-        year: "2024",
-        software: ["3ds Max", "Corona Renderer", "Photoshop"]
+        id: 'rendering-architettonici',
+        title: 'Rendering Architettonici Professionali',
+        category: 'render',
+        description: 'Collezione di rendering architettonici fotorealistici che mostrano la nostra capacità di trasformare progetti tecnici in visualizzazioni emozionali e coinvolgenti.',
+        images: [
+            'realizzazione render/Immagine WhatsApp 2025-07-27 ore 13.34.47_285ff1e3.jpg',
+            'realizzazione render/Immagine WhatsApp 2025-07-27 ore 13.34.49_00c94580.jpg',
+            'realizzazione render/Immagine WhatsApp 2025-07-27 ore 13.34.49_119bfddd.jpg',
+            'realizzazione render/Immagine WhatsApp 2025-07-27 ore 13.34.49_155e1a6a.jpg',
+            'realizzazione render/Immagine WhatsApp 2025-07-27 ore 13.34.49_16ff8519.jpg',
+            'realizzazione render/Immagine WhatsApp 2025-07-27 ore 13.34.49_20955247.jpg'
+        ],
+        coverImage: 'realizzazione render/Immagine WhatsApp 2025-07-27 ore 13.34.47_285ff1e3.jpg',
+        year: '2024-2025',
+        client: 'Vari Clienti',
+        location: 'Italia',
+        details: {
+            tipologia: 'Rendering Architettonici',
+            software: '3D Studio Max, V-Ray, Photoshop',
+            risoluzione: '4K - 8K',
+            servizi: ['Modellazione 3D', 'Texturing', 'Lighting', 'Post-produzione']
+        }
     },
     {
-        id: 3,
-        title: "Padiglione Fieristico Tech Expo",
-        description: "Stand espositivo innovativo per fiera tecnologica internazionale",
-        category: "padiglioni",
-        tags: ["Stand", "Tecnologia", "Innovativo", "Fiera"],
-        image: "",
-        fullDescription: "Progettazione e visualizzazione di un padiglione espositivo di 500mq per azienda leader nel settore tecnologico. Il design si caratterizza per l'uso di LED wall, strutture cinetiche e installazioni interattive. L'obiettivo era creare un'esperienza immersiva che comunicasse i valori di innovazione e futuro dell'azienda. Il padiglione include aree demo, spazi meeting e una zona lounge per i visitatori VIP.",
-        client: "TechCorp International",
-        year: "2023",
-        software: ["SketchUp", "Lumion", "AutoCAD"]
+        id: 'rendering-serie-2',
+        title: 'Portfolio Rendering - Serie 2',
+        category: 'render',
+        description: 'Seconda serie di rendering architettonici che esplorano diverse tipologie progettuali, dall\'architettura residenziale a quella commerciale.',
+        images: [
+            'realizzazione render 2/Immagine WhatsApp 2025-07-27 ore 13.44.20_2f4ce8d2.jpg',
+            'realizzazione render 2/Immagine WhatsApp 2025-07-27 ore 13.44.21_0e33c81a.jpg',
+            'realizzazione render 2/Immagine WhatsApp 2025-07-27 ore 13.44.21_204f0235.jpg',
+            'realizzazione render 2/Immagine WhatsApp 2025-07-27 ore 13.44.21_eb6988b9.jpg',
+            'realizzazione render 2/Immagine WhatsApp 2025-07-27 ore 13.44.22_415509d8.jpg'
+        ],
+        coverImage: 'realizzazione render 2/Immagine WhatsApp 2025-07-27 ore 13.44.20_2f4ce8d2.jpg',
+        year: '2024-2025',
+        client: 'Vari Clienti',
+        location: 'Italia',
+        details: {
+            tipologia: 'Rendering Architettonici',
+            focus: 'Architettura Residenziale e Commerciale',
+            stile: 'Fotorealismo',
+            servizi: ['Concept Visual', 'Rendering Finali', 'Animazioni 3D']
+        }
     },
     {
-        id: 4,
-        title: "Centro Commerciale - Concept",
-        description: "Visualizzazione architettonica per nuovo centro commerciale",
-        category: "rendering",
-        tags: ["Commerciale", "Architettura", "Concept", "Urbano"],
-        image: "",
-        fullDescription: "Rendering architettonico per un nuovo centro commerciale di 50.000mq che ridefinisce il concetto di shopping experience. Il progetto integra spazi commerciali, aree ristorazione, cinema multisala e spazi verdi. La facciata dinamica e gli interni luminosi creano un ambiente accogliente e moderno. Particolare attenzione è stata data alla sostenibilità ambientale e all'efficienza energetica dell'edificio.",
-        client: "Retail Development Group",
-        year: "2024",
-        software: ["Rhino", "V-Ray", "Photoshop"]
-    },
-    {
-        id: 5,
-        title: "Padiglione Automotive Show",
-        description: "Stand per salone dell'automobile con design futuristico",
-        category: "padiglioni",
-        tags: ["Automotive", "Futuristico", "Stand", "Design"],
-        image: "",
-        fullDescription: "Progetto per stand espositivo di casa automobilistica premium al Salone di Ginevra. Il design si ispira alle linee aerodinamiche delle auto sportive del brand. Utilizzo di materiali high-tech come carbonio, alluminio spazzolato e vetro strutturale. Il padiglione include una piattaforma rotante per l'auto principale, simulatori di guida e una area VIP con vista panoramica sul salone.",
-        client: "Premium Auto Brand",
-        year: "2023",
-        software: ["3ds Max", "V-Ray", "After Effects"]
-    },
-    {
-        id: 6,
-        title: "Modello 3D Prodotto Design",
-        description: "Modellazione e rendering di prodotto industriale innovativo",
-        category: "3d",
-        tags: ["Prodotto", "Industriale", "Modellazione", "Innovativo"],
-        image: "",
-        fullDescription: "Modellazione 3D dettagliata di dispositivo IoT per smart home. Il progetto include la creazione del modello tridimensionale completo, texturing fotorealistico e rendering per catalogo prodotto. Particolare attenzione ai dettagli costruttivi, alle finiture superficiali e all'integrazione con l'ambiente domestico. Il modello è stato utilizzato per prototipazione virtuale e marketing pre-lancio.",
-        client: "Smart Home Tech",
-        year: "2024",
-        software: ["Fusion 360", "KeyShot", "Photoshop"]
-    },
-    {
-        id: 7,
-        title: "Ristorante Gourmet - Interni",
-        description: "Rendering d'interni per ristorante stellato in centro storico",
-        category: "rendering",
-        tags: ["Ristorante", "Gourmet", "Interni", "Elegante"],
-        image: "",
-        fullDescription: "Progetto di interior design per ristorante gourmet in palazzo storico del XVI secolo. Il design contemporaneo rispetta l'architettura originale integrando elementi moderni con dettagli storici. Illuminazione scenografica, arredi su misura e materiali pregiati creano un'atmosfera intima ed elegante. Il progetto include sala principale, cucina a vista, cantina dei vini e terrazza panoramica.",
-        client: "Chef Michelin Restaurant",
-        year: "2023",
-        software: ["3ds Max", "Corona Renderer", "Photoshop"]
-    },
-    {
-        id: 8,
-        title: "Padiglione Museale Interattivo",
-        description: "Allestimento espositivo per mostra d'arte contemporanea",
-        category: "padiglioni",
-        tags: ["Museo", "Arte", "Interattivo", "Cultura"],
-        image: "",
-        fullDescription: "Progettazione di allestimento espositivo per mostra temporanea di arte contemporanea. Il concept si basa sull'interazione tra visitatore e opera d'arte attraverso tecnologie immersive. Percorsi dinamici, illuminazione adattiva e installazioni multimediali guidano il visitatore in un'esperienza unica. L'allestimento è modulare e riconfigurabili per diverse tipologie di esposizioni.",
-        client: "Museo Arte Moderna",
-        year: "2024",
-        software: ["SketchUp", "Lumion", "TouchDesigner"]
-    },
-    {
-        id: 9,
-        title: "Uffici Corporate - Headquarters",
-        description: "Rendering per nuova sede aziendale con spazi flessibili",
-        category: "rendering",
-        tags: ["Uffici", "Corporate", "Moderno", "Flessibile"],
-        image: "",
-        fullDescription: "Visualizzazione architettonica per nuova sede corporate di multinazionale tecnologica. Il progetto prevede spazi di lavoro flessibili, aree collaborative, zone relax e auditorium. Design biophilico con ampie vetrate, giardini verticali e materiali naturali per il benessere dei dipendenti. Integrazione di tecnologie smart building per gestione automatizzata di illuminazione, climatizzazione e sicurezza.",
-        client: "Global Tech Corporation",
-        year: "2024",
-        software: ["Revit", "Enscape", "Photoshop"]
+        id: 'progetti-sviluppo',
+        title: 'Progetti in Fase di Realizzazione',
+        category: 'sviluppo',
+        description: 'Progetti attualmente in fase di sviluppo che mostrano il nostro processo creativo dalla progettazione iniziale alla realizzazione finale.',
+        images: [
+            'in fase di realizzazione/Immagine WhatsApp 2025-07-27 ore 13.37.23_7e0c8fdb.jpg',
+            'in fase di realizzazione/Immagine WhatsApp 2025-07-27 ore 13.37.23_d9baec3f.jpg',
+            'in fase di realizzazione/Immagine WhatsApp 2025-07-27 ore 13.37.23_e9e31ad5.jpg',
+            'in fase di realizzazione/Immagine WhatsApp 2025-07-27 ore 13.37.23_ee9cc75f.jpg',
+            'in fase di realizzazione/Immagine WhatsApp 2025-07-27 ore 13.37.24_36f6da97.jpg',
+            'in fase di realizzazione/Immagine WhatsApp 2025-07-27 ore 13.37.24_5a482ca8.jpg'
+        ],
+        coverImage: 'in fase di realizzazione/Immagine WhatsApp 2025-07-27 ore 13.37.23_7e0c8fdb.jpg',
+        year: '2025',
+        client: 'In Sviluppo',
+        location: 'Varie',
+        details: {
+            stato: 'In Corso di Realizzazione',
+            tipologia: 'Progetti Misti',
+            fase: 'Sviluppo e Costruzione',
+            servizi: ['Progettazione', 'Direzione Lavori', 'Consulenza Tecnica']
+        }
     }
 ];
 
-// Configurazione animazioni
-const animationConfig = {
-    duration: 800,
-    easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
-    stagger: 200,
-    threshold: 0.1
-};
-
-// Categorie portfolio
-const portfolioCategories = {
-    all: "Tutti",
-    rendering: "Rendering",
-    padiglioni: "Padiglioni", 
-    "3d": "Modellazione 3D"
-};
-
-// Messaggi di notifica
-const notificationMessages = {
-    success: {
-        form: "Messaggio inviato con successo! Ti risponderemo presto.",
-        filter: "Portfolio filtrato con successo."
-    },
-    error: {
-        form: "Errore nell'invio del messaggio. Riprova più tardi.",
-        validation: "Compila tutti i campi obbligatori.",
-        email: "Inserisci un indirizzo email valido."
-    }
-};
-
-// Configurazione particles
+// Particles Configuration
 const particlesConfig = {
     count: 50,
-    speed: 0.5,
     size: {
         min: 2,
-        max: 4
+        max: 6
+    },
+    speed: {
+        min: 0.5,
+        max: 2
     },
     opacity: {
-        min: 0.3,
-        max: 0.8
+        min: 0.1,
+        max: 0.3
     }
 };
 
-// Export per uso in altri moduli
+// Animation Configuration
+const animationConfig = {
+    observerOptions: {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    },
+    staggerDelay: 100, // milliseconds
+    transitionDuration: 800 // milliseconds
+};
+
+// Form Validation Rules
+const validationRules = {
+    name: {
+        required: true,
+        minLength: 2,
+        message: 'Il nome deve contenere almeno 2 caratteri'
+    },
+    email: {
+        required: true,
+        pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+        message: 'Inserisci un indirizzo email valido'
+    },
+    subject: {
+        required: true,
+        minLength: 5,
+        message: 'L\'oggetto deve contenere almeno 5 caratteri'
+    },
+    message: {
+        required: true,
+        minLength: 20,
+        message: 'Il messaggio deve contenere almeno 20 caratteri'
+    }
+};
+
+// Export for module usage (if using modules)
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
         siteConfig,
         portfolioData,
+        particlesConfig,
         animationConfig,
-        portfolioCategories,
-        notificationMessages,
-        particlesConfig
+        validationRules
     };
 }

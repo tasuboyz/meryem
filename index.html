@@ -3,38 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio - Rendering & Padiglioni | Architettura e Design</title>
-    <meta name="description" content="Portfolio professionale specializzato in rendering architettonici e progettazione di padiglioni espositivi. Soluzioni creative e innovative per i tuoi progetti.">
+    <title>StudioDesign - Portfolio Architettonico e Rendering</title>
+    <meta name="description" content="Portfolio professionale di design architettonico, rendering 3D e progettazione padiglioni espositivi">
+    <meta name="keywords" content="design architettonico, rendering 3D, padiglioni espositivi, progettazione">
+    <meta name="author" content="StudioDesign">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="StudioDesign - Portfolio Architettonico">
+    <meta property="og:description" content="Portfolio professionale di design architettonico e rendering 3D">
+    <meta property="og:type" content="website">
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="css/style.css" as="style">
+    <link rel="preload" href="js/main.js" as="script">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/style.css">
+    
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Navbar -->
+    <!-- Navigation -->
     <nav class="navbar" id="navbar">
         <div class="nav-container">
-            <div class="nav-logo">
-                <span class="logo-text">Studio<span class="accent">Design</span></span>
+            <div class="nav-brand">
+                <span class="brand-text">StudioDesign</span>
             </div>
+            
             <ul class="nav-menu" id="nav-menu">
                 <li class="nav-item">
-                    <a href="#home" class="nav-link">Home</a>
+                    <a href="#home" class="nav-link active" data-section="home">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a href="#about" class="nav-link">Chi Sono</a>
+                    <a href="#about" class="nav-link" data-section="about">Chi Siamo</a>
                 </li>
                 <li class="nav-item">
-                    <a href="#services" class="nav-link">Servizi</a>
+                    <a href="#services" class="nav-link" data-section="services">Servizi</a>
                 </li>
                 <li class="nav-item">
-                    <a href="#portfolio" class="nav-link">Portfolio</a>
+                    <a href="#portfolio" class="nav-link" data-section="portfolio">Portfolio</a>
                 </li>
                 <li class="nav-item">
-                    <a href="#contact" class="nav-link">Contatti</a>
+                    <a href="#contact" class="nav-link" data-section="contact">Contatti</a>
                 </li>
             </ul>
-            <div class="hamburger" id="hamburger">
+            
+            <div class="nav-toggle" id="nav-toggle">
                 <span class="bar"></span>
                 <span class="bar"></span>
                 <span class="bar"></span>
@@ -44,105 +61,98 @@
 
     <!-- Hero Section -->
     <section id="home" class="hero">
-        <div class="hero-background">
-            <div class="hero-overlay"></div>
-            <div class="particles" id="particles"></div>
-        </div>
-        <div class="hero-content">
-            <div class="hero-text fade-in-up">
+        <div class="particles-background" id="particles-container"></div>
+        <div class="hero-container">
+            <div class="hero-content">
                 <h1 class="hero-title">
-                    <span class="title-line">Rendering</span>
-                    <span class="title-line accent">Architettonici</span>
-                    <span class="title-line">& Padiglioni</span>
+                    <span class="hero-title-line">Design</span>
+                    <span class="hero-title-line">Architettonico</span>
+                    <span class="hero-title-line accent-text">Professionale</span>
                 </h1>
                 <p class="hero-subtitle">
-                    Trasformo idee in visualizzazioni mozzafiato e creo spazi espositivi che raccontano storie uniche
+                    Specialisti in rendering 3D e progettazione di padiglioni espositivi per fiere internazionali
                 </p>
                 <div class="hero-buttons">
-                    <a href="#portfolio" class="btn btn-primary">Esplora Portfolio</a>
-                    <a href="#contact" class="btn btn-outline">Inizia Progetto</a>
+                    <a href="#portfolio" class="btn btn-primary">Vedi Portfolio</a>
+                    <a href="#contact" class="btn btn-secondary">Contattaci</a>
                 </div>
             </div>
-            <div class="hero-image fade-in-right">
-                <div class="floating-card">
-                    <div class="card-content">
-                        <div class="card-icon">🏗️</div>
-                        <h3>Rendering 3D</h3>
-                        <p>Visualizzazioni fotorealistiche</p>
-                    </div>
+            
+            <div class="hero-cards">
+                <div class="floating-card" data-delay="0">
+                    <div class="card-icon">🏗️</div>
+                    <h3>Rendering 3D</h3>
+                    <p>Visualizzazioni fotorealistiche</p>
                 </div>
-                <div class="floating-card delay-1">
-                    <div class="card-content">
-                        <div class="card-icon">🎨</div>
-                        <h3>Padiglioni</h3>
-                        <p>Design espositivo innovativo</p>
-                    </div>
+                <div class="floating-card" data-delay="200">
+                    <div class="card-icon">🎪</div>
+                    <h3>Padiglioni Espositivi</h3>
+                    <p>Design per fiere internazionali</p>
                 </div>
-                <div class="floating-card delay-2">
-                    <div class="card-content">
-                        <div class="card-icon">✨</div>
-                        <h3>Creatività</h3>
-                        <p>Soluzioni su misura</p>
-                    </div>
+                <div class="floating-card" data-delay="400">
+                    <div class="card-icon">📐</div>
+                    <h3>Progettazione</h3>
+                    <p>Soluzioni architettoniche innovative</p>
                 </div>
             </div>
-        </div>
-        <div class="scroll-indicator">
-            <div class="scroll-arrow"></div>
         </div>
     </section>
 
     <!-- About Section -->
-    <section id="about" class="about">
+    <section id="about" class="about section">
         <div class="container">
             <div class="section-header">
-                <span class="section-subtitle">Chi Sono</span>
-                <h2 class="section-title">Passione per il Design e l'Innovazione</h2>
+                <h2 class="section-title">Chi Siamo</h2>
+                <p class="section-subtitle">Passione per il design e competenza tecnica</p>
             </div>
+            
             <div class="about-content">
                 <div class="about-text">
-                    <div class="text-content fade-in-left">
-                        <p class="lead">
-                            Sono una designer specializzata in rendering architettonici e progettazione di padiglioni espositivi, 
-                            con oltre 5 anni di esperienza nel settore.
+                    <div class="about-description">
+                        <h3>La Nostra Visione</h3>
+                        <p>
+                            Siamo specialisti nel design architettonico e nella creazione di rendering 3D 
+                            fotorealistici. La nostra passione per l'innovazione e l'attenzione ai dettagli 
+                            ci permettono di trasformare idee in realtà visive straordinarie.
                         </p>
                         <p>
-                            La mia missione è dare vita alle idee attraverso visualizzazioni 3D fotorealistiche e spazi espositivi 
-                            che catturano l'attenzione e comunicano efficacemente il messaggio del brand.
+                            Con particolare expertise nella progettazione di padiglioni espositivi per 
+                            fiere internazionali, aiutiamo i nostri clienti a distinguersi e comunicare 
+                            efficacemente il loro brand attraverso spazi unici e coinvolgenti.
                         </p>
-                        <div class="skills-grid">
-                            <div class="skill-item">
-                                <div class="skill-icon">🎯</div>
-                                <h4>Precisione</h4>
-                                <p>Attenzione ai dettagli</p>
+                    </div>
+                    
+                    <div class="about-features">
+                        <div class="feature-item">
+                            <div class="feature-icon">✨</div>
+                            <div class="feature-content">
+                                <h4>Qualità Superiore</h4>
+                                <p>Rendering fotorealistici con attenzione maniacale ai dettagli</p>
                             </div>
-                            <div class="skill-item">
-                                <div class="skill-icon">⚡</div>
-                                <h4>Velocità</h4>
-                                <p>Consegne puntuali</p>
-                            </div>
-                            <div class="skill-item">
-                                <div class="skill-icon">💡</div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">🚀</div>
+                            <div class="feature-content">
                                 <h4>Innovazione</h4>
-                                <p>Soluzioni creative</p>
+                                <p>Soluzioni creative e tecnologie all'avanguardia</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">🤝</div>
+                            <div class="feature-content">
+                                <h4>Collaborazione</h4>
+                                <p>Lavoriamo a stretto contatto con i clienti</p>
                             </div>
                         </div>
                     </div>
                 </div>
+                
                 <div class="about-image">
-                    <div class="image-container fade-in-right">
-                        <div class="placeholder-image">
-                            <div class="image-placeholder">
-                                <span>👩‍💼</span>
-                                <p>La tua foto professionale</p>
-                            </div>
-                        </div>
-                        <div class="experience-badge">
-                            <div class="badge-content">
-                                <span class="badge-number">5+</span>
-                                <span class="badge-text">Anni di Esperienza</span>
-                            </div>
-                        </div>
+                    <div class="image-container">
+                        <img src="foto designer/Immagine WhatsApp 2025-07-27 ore 13.47.15_5ea4392e.jpg" 
+                             alt="Designer StudioDesign" 
+                             loading="lazy">
+                        <div class="image-overlay"></div>
                     </div>
                 </div>
             </div>
@@ -150,50 +160,62 @@
     </section>
 
     <!-- Services Section -->
-    <section id="services" class="services">
+    <section id="services" class="services section">
         <div class="container">
             <div class="section-header">
-                <span class="section-subtitle">Servizi</span>
-                <h2 class="section-title">Soluzioni Complete per i Tuoi Progetti</h2>
+                <h2 class="section-title">I Nostri Servizi</h2>
+                <p class="section-subtitle">Soluzioni complete per ogni esigenza progettuale</p>
             </div>
+            
             <div class="services-grid">
-                <div class="service-card fade-in-up">
+                <div class="service-card" data-aos="fade-up" data-delay="0">
                     <div class="service-icon">
-                        <div class="icon-bg">🏢</div>
+                        <div class="icon">🏗️</div>
                     </div>
-                    <h3>Rendering Architettonici</h3>
-                    <p>Visualizzazioni 3D fotorealistiche di edifici, interni ed esterni per presentazioni professionali e marketing immobiliare.</p>
+                    <h3 class="service-title">Rendering 3D Architettonico</h3>
+                    <p class="service-description">
+                        Visualizzazioni fotorealistiche di edifici, interni ed esterni 
+                        con illuminazione naturale e materiali realistici.
+                    </p>
                     <ul class="service-features">
-                        <li>Rendering esterni fotorealistici</li>
-                        <li>Visualizzazioni d'interni</li>
-                        <li>Tour virtuali 360°</li>
-                        <li>Animazioni architettoniche</li>
-                    </ul>
-                </div>
-                <div class="service-card fade-in-up delay-1">
-                    <div class="service-icon">
-                        <div class="icon-bg">🎪</div>
-                    </div>
-                    <h3>Padiglioni Espositivi</h3>
-                    <p>Progettazione e visualizzazione di stand fieristici e padiglioni espositivi che catturano l'attenzione del pubblico.</p>
-                    <ul class="service-features">
-                        <li>Design stand fieristici</li>
-                        <li>Allestimenti museali</li>
-                        <li>Spazi espositivi temporanei</li>
-                        <li>Concept creativi personalizzati</li>
-                    </ul>
-                </div>
-                <div class="service-card fade-in-up delay-2">
-                    <div class="service-icon">
-                        <div class="icon-bg">🎨</div>
-                    </div>
-                    <h3>Modellazione 3D</h3>
-                    <p>Creazione di modelli tridimensionali dettagliati per architettura, product design e visualizzazioni artistiche.</p>
-                    <ul class="service-features">
-                        <li>Modellazione dettagliata</li>
-                        <li>Texturing avanzato</li>
-                        <li>Illuminazione realistica</li>
+                        <li>Rendering esterni ed interni</li>
+                        <li>Illuminazione fotorealistica</li>
+                        <li>Materiali e texture avanzate</li>
                         <li>Post-produzione professionale</li>
+                    </ul>
+                </div>
+                
+                <div class="service-card" data-aos="fade-up" data-delay="200">
+                    <div class="service-icon">
+                        <div class="icon">🎪</div>
+                    </div>
+                    <h3 class="service-title">Padiglioni Espositivi</h3>
+                    <p class="service-description">
+                        Progettazione completa di stand e padiglioni per fiere internazionali, 
+                        dalla concept alla realizzazione.
+                    </p>
+                    <ul class="service-features">
+                        <li>Design concept e layout</li>
+                        <li>Progettazione tecnica</li>
+                        <li>Rendering di presentazione</li>
+                        <li>Supporto alla realizzazione</li>
+                    </ul>
+                </div>
+                
+                <div class="service-card" data-aos="fade-up" data-delay="400">
+                    <div class="service-icon">
+                        <div class="icon">📐</div>
+                    </div>
+                    <h3 class="service-title">Progettazione Architettonica</h3>
+                    <p class="service-description">
+                        Sviluppo di progetti architettonici completi con particolare 
+                        attenzione all'innovazione e alla sostenibilità.
+                    </p>
+                    <ul class="service-features">
+                        <li>Concept design</li>
+                        <li>Progettazione esecutiva</li>
+                        <li>Documentazione tecnica</li>
+                        <li>Consulenza specialistica</li>
                     </ul>
                 </div>
             </div>
@@ -201,78 +223,90 @@
     </section>
 
     <!-- Portfolio Section -->
-    <section id="portfolio" class="portfolio">
+    <section id="portfolio" class="portfolio section">
         <div class="container">
             <div class="section-header">
-                <span class="section-subtitle">Portfolio</span>
-                <h2 class="section-title">I Miei Lavori</h2>
+                <h2 class="section-title">Portfolio</h2>
+                <p class="section-subtitle">I nostri progetti più significativi</p>
             </div>
+            
             <div class="portfolio-filters">
                 <button class="filter-btn active" data-filter="all">Tutti</button>
-                <button class="filter-btn" data-filter="rendering">Rendering</button>
-                <button class="filter-btn" data-filter="padiglioni">Padiglioni</button>
-                <button class="filter-btn" data-filter="3d">Modellazione 3D</button>
+                <button class="filter-btn" data-filter="fiere">Fiere</button>
+                <button class="filter-btn" data-filter="render">Rendering</button>
+                <button class="filter-btn" data-filter="sviluppo">In Sviluppo</button>
             </div>
+            
             <div class="portfolio-grid" id="portfolio-grid">
-                <!-- Portfolio items will be populated by JavaScript -->
+                <!-- Portfolio items will be generated by JavaScript -->
             </div>
         </div>
     </section>
 
     <!-- Contact Section -->
-    <section id="contact" class="contact">
+    <section id="contact" class="contact section">
         <div class="container">
             <div class="section-header">
-                <span class="section-subtitle">Contatti</span>
-                <h2 class="section-title">Iniziamo il Tuo Progetto</h2>
+                <h2 class="section-title">Contattaci</h2>
+                <p class="section-subtitle">Iniziamo insieme il tuo prossimo progetto</p>
             </div>
+            
             <div class="contact-content">
-                <div class="contact-info fade-in-left">
-                    <div class="contact-card">
+                <div class="contact-info">
+                    <h3>Informazioni di Contatto</h3>
+                    <div class="contact-item">
                         <div class="contact-icon">📧</div>
-                        <h3>Email</h3>
-                        <p>info@studiodesign.com</p>
+                        <div class="contact-details">
+                            <h4>Email</h4>
+                            <p>info@studiodesign.it</p>
+                        </div>
                     </div>
-                    <div class="contact-card">
+                    <div class="contact-item">
                         <div class="contact-icon">📱</div>
-                        <h3>Telefono</h3>
-                        <p>+39 123 456 7890</p>
+                        <div class="contact-details">
+                            <h4>Telefono</h4>
+                            <p>+39 XXX XXX XXXX</p>
+                        </div>
                     </div>
-                    <div class="contact-card">
+                    <div class="contact-item">
                         <div class="contact-icon">📍</div>
-                        <h3>Sede</h3>
-                        <p>Milano, Italia</p>
-                    </div>
-                    <div class="contact-card">
-                        <div class="contact-icon">⏰</div>
-                        <h3>Orari</h3>
-                        <p>Lun-Ven: 9:00-18:00</p>
+                        <div class="contact-details">
+                            <h4>Studio</h4>
+                            <p>Italia</p>
+                        </div>
                     </div>
                 </div>
-                <div class="contact-form-container fade-in-right">
-                    <form class="contact-form" id="contact-form">
-                        <div class="form-group">
-                            <input type="text" id="name" name="name" required>
-                            <label for="name">Nome *</label>
-                        </div>
-                        <div class="form-group">
-                            <input type="email" id="email" name="email" required>
-                            <label for="email">Email *</label>
-                        </div>
-                        <div class="form-group">
-                            <input type="text" id="subject" name="subject" required>
-                            <label for="subject">Oggetto *</label>
-                        </div>
-                        <div class="form-group">
-                            <textarea id="message" name="message" rows="5" required></textarea>
-                            <label for="message">Messaggio *</label>
-                        </div>
-                        <button type="submit" class="btn btn-primary">
-                            <span>Invia Messaggio</span>
-                            <div class="btn-loader"></div>
-                        </button>
-                    </form>
-                </div>
+                
+                <form class="contact-form" id="contact-form">
+                    <div class="form-group">
+                        <label for="name" class="form-label">Nome *</label>
+                        <input type="text" id="name" name="name" class="form-input" required>
+                        <span class="form-error" id="name-error"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email" class="form-label">Email *</label>
+                        <input type="email" id="email" name="email" class="form-input" required>
+                        <span class="form-error" id="email-error"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="subject" class="form-label">Oggetto *</label>
+                        <input type="text" id="subject" name="subject" class="form-input" required>
+                        <span class="form-error" id="subject-error"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message" class="form-label">Messaggio *</label>
+                        <textarea id="message" name="message" class="form-textarea" rows="5" required></textarea>
+                        <span class="form-error" id="message-error"></span>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-full">
+                        <span class="btn-text">Invia Messaggio</span>
+                        <span class="btn-loading" style="display: none;">Invio in corso...</span>
+                    </button>
+                </form>
             </div>
         </div>
     </section>
@@ -281,73 +315,66 @@
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
-                <div class="footer-section">
-                    <div class="footer-logo">
-                        <span class="logo-text">Studio<span class="accent">Design</span></span>
-                    </div>
-                    <p>Trasformiamo le tue idee in realtà attraverso rendering di alta qualità e design innovativo.</p>
-                    <div class="social-links">
-                        <a href="#" class="social-link">📘</a>
-                        <a href="#" class="social-link">📷</a>
-                        <a href="#" class="social-link">💼</a>
-                        <a href="#" class="social-link">🐦</a>
-                    </div>
+                <div class="footer-brand">
+                    <h3>StudioDesign</h3>
+                    <p>Trasformiamo idee in realtà visive straordinarie</p>
                 </div>
-                <div class="footer-section">
-                    <h4>Servizi</h4>
+                
+                <div class="footer-links">
+                    <h4>Link Utili</h4>
                     <ul>
-                        <li><a href="#services">Rendering Architettonici</a></li>
-                        <li><a href="#services">Padiglioni Espositivi</a></li>
-                        <li><a href="#services">Modellazione 3D</a></li>
+                        <li><a href="#about">Chi Siamo</a></li>
+                        <li><a href="#services">Servizi</a></li>
                         <li><a href="#portfolio">Portfolio</a></li>
+                        <li><a href="#contact">Contatti</a></li>
                     </ul>
                 </div>
-                <div class="footer-section">
+                
+                <div class="footer-contact">
                     <h4>Contatti</h4>
-                    <ul>
-                        <li>📧 info@studiodesign.com</li>
-                        <li>📱 +39 123 456 7890</li>
-                        <li>📍 Milano, Italia</li>
-                    </ul>
+                    <p>info@studiodesign.it</p>
+                    <p>+39 XXX XXX XXXX</p>
                 </div>
             </div>
+            
             <div class="footer-bottom">
                 <p>&copy; 2025 StudioDesign. Tutti i diritti riservati.</p>
             </div>
         </div>
     </footer>
 
-    <!-- Notification -->
-    <div class="notification" id="notification">
-        <div class="notification-content">
-            <span class="notification-icon"></span>
-            <span class="notification-message"></span>
-        </div>
-        <button class="notification-close">&times;</button>
-    </div>
-
     <!-- Portfolio Modal -->
     <div class="modal" id="portfolio-modal">
-        <div class="modal-overlay"></div>
         <div class="modal-content">
-            <button class="modal-close">&times;</button>
+            <div class="modal-header">
+                <h3 class="modal-title" id="modal-title"></h3>
+                <button class="modal-close" id="modal-close">&times;</button>
+            </div>
             <div class="modal-body">
-                <div class="modal-image">
-                    <img src="" alt="" id="modal-image">
+                <div class="modal-gallery" id="modal-gallery">
+                    <!-- Images will be populated by JavaScript -->
                 </div>
                 <div class="modal-info">
-                    <h3 id="modal-title"></h3>
-                    <p class="modal-category" id="modal-category"></p>
                     <p class="modal-description" id="modal-description"></p>
-                    <div class="modal-tags" id="modal-tags"></div>
+                    <div class="modal-details" id="modal-details"></div>
                 </div>
             </div>
         </div>
+        <div class="modal-overlay" id="modal-overlay"></div>
     </div>
 
+    <!-- Notification System -->
+    <div class="notification" id="notification">
+        <div class="notification-content">
+            <span class="notification-message" id="notification-message"></span>
+            <button class="notification-close" id="notification-close">&times;</button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
     <script src="js/data.js"></script>
-    <script src="js/portfolio.js"></script>
     <script src="js/navigation.js"></script>
+    <script src="js/portfolio.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>
