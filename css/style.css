@@ -1016,7 +1016,7 @@ h1, h2, h3, h4, h5, h6 {
 .project-modal .modal-content {
     position: relative;
     width: 95%;
-    max-width: 1200px;
+    max-width: 1300px;
     height: 90vh;
     margin: 2.5vh auto;
     background: var(--background-main);
@@ -1065,8 +1065,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .project-info {
-    width: 350px;
-    padding: 30px;
+    width: 420px;
+    padding: 35px;
     border-right: 1px solid var(--border);
     overflow-y: auto;
     background: var(--background-alt);
@@ -1295,9 +1295,10 @@ h1, h2, h3, h4, h5, h6 {
     
     .project-info {
         width: 100%;
-        height: 200px;
+        height: 280px;
         border-right: none;
         border-bottom: 1px solid var(--border);
+        padding: 25px;
     }
     
     .gallery-main {

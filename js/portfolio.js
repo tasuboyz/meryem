@@ -230,11 +230,19 @@ class PortfolioManager {
             return;
         }
 
-        // Set total images
-        totalImagesSpan.textContent = this.currentImages.length;
+        // Limit number of images shown (max 8 to maintain proportions)
+        const maxImages = 8;
+        const originalCount = this.currentImages.length;
+        const imagesToShow = this.currentImages.slice(0, maxImages);
+        
+        // Update the current images to only include limited images
+        this.currentImages = imagesToShow;
 
+        // Set total images (show actual number being displayed)
+        totalImagesSpan.textContent = imagesToShow.length;
+        
         // Create thumbnails
-        this.currentImages.forEach((imagePath, index) => {
+        imagesToShow.forEach((imagePath, index) => {
             const thumbnail = document.createElement('div');
             thumbnail.className = `thumbnail ${index === 0 ? 'active' : ''}`;
             thumbnail.innerHTML = `<img src="${imagePath}" alt="Thumbnail ${index + 1}">`;
