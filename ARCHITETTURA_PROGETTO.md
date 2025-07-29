@@ -78,7 +78,7 @@ Questa organizzazione rende il portfolio facilmente espandibile e professionale,
 ```css
 :root {
     /* Color Palette */
-    --background-main: #FFFFFF;         /* Sfondo principale bianco */
+    --background-main: #dbdbdb;         /* Sfondo principale bianco */
     --background-alt: #F3F4F6;         /* Sfondo alternativo grigio chiaro */
     --text-primary: #23272A;           /* Testo principale grigio molto scuro */
     --text-secondary: #6B7280;         /* Testo secondario grigio medio */
