@@ -3,8 +3,13 @@ class PortfolioManager {
     constructor() {
         this.portfolioGrid = document.getElementById('portfolio-grid');
         this.filterButtons = document.querySelectorAll('.filter-btn');
+        this.modal = document.getElementById('project-modal');
+        this.modalOverlay = this.modal?.querySelector('.modal-overlay');
+        this.modalClose = this.modal?.querySelector('#modal-close');
         this.currentFilter = 'all';
         this.portfolioItems = [];
+        this.currentImageIndex = 0;
+        this.currentImages = [];
         
         this.init();
     }
@@ -41,7 +46,8 @@ class PortfolioManager {
         if (item.image && item.image.trim() !== '') {
             imageContent = `
                 <img src="${item.image}" alt="${item.title}" class="portfolio-img" 
-                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                     onload="this.nextElementSibling.style.display='none';">
                 <div class="image-placeholder-portfolio" style="display: none;">
                     <span class="icon">${categoryIcon}</span>
                     <span class="text">Immagine progetto</span>
@@ -93,12 +99,37 @@ class PortfolioManager {
             });
         });
 
-        // Portfolio items click - solo per mostrare info basilari
+        // Portfolio items click
         this.portfolioGrid?.addEventListener('click', (e) => {
             const portfolioItem = e.target.closest('.portfolio-item');
             if (portfolioItem) {
                 const itemId = parseInt(portfolioItem.dataset.id);
-                this.showProjectInfo(itemId);
+                this.openProjectModal(itemId);
+            }
+        });
+
+        // Modal events
+        this.modalClose?.addEventListener('click', () => this.closeModal());
+        this.modalOverlay?.addEventListener('click', () => this.closeModal());
+        
+        // Gallery navigation
+        document.getElementById('prev-btn')?.addEventListener('click', () => this.prevImage());
+        document.getElementById('next-btn')?.addEventListener('click', () => this.nextImage());
+        
+        // Keyboard events
+        document.addEventListener('keydown', (e) => {
+            if (this.modal?.classList.contains('active')) {
+                switch(e.key) {
+                    case 'Escape':
+                        this.closeModal();
+                        break;
+                    case 'ArrowLeft':
+                        this.prevImage();
+                        break;
+                    case 'ArrowRight':
+                        this.nextImage();
+                        break;
+                }
             }
         });
     }
@@ -141,18 +172,135 @@ class PortfolioManager {
         activeButton.classList.add('active');
     }
 
-    showProjectInfo(itemId) {
+    openProjectModal(itemId) {
         const item = portfolioData.find(p => p.id === itemId);
-        if (!item) return;
+        if (!item || !this.modal) return;
 
-        // Mostra una notifica con le info del progetto
-        if (typeof showNotification === 'function') {
-            const info = `${item.title} - ${item.details?.client || 'Cliente'} (${item.year}) - ${item.status}`;
-            showNotification(info, 'info');
-        } else {
-            // Fallback con alert se la funzione di notifica non è disponibile
-            alert(`${item.title}\n${item.description}\nCliente: ${item.details?.client || 'N/A'}\nAnno: ${item.year}\nStatus: ${item.status}`);
+        this.currentImages = item.images || [];
+        this.currentImageIndex = 0;
+
+        // Populate modal content
+        this.populateModalContent(item);
+        
+        // Show modal with animation
+        this.modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        
+        requestAnimationFrame(() => {
+            this.modal.classList.add('active');
+        });
+    }
+
+    populateModalContent(item) {
+        // Basic info
+        document.getElementById('modal-title').textContent = item.title;
+        document.getElementById('modal-category').textContent = this.getCategoryName(item.category);
+        document.getElementById('modal-description').textContent = item.fullDescription || item.description;
+        document.getElementById('modal-client').textContent = item.details?.client || 'N/A';
+        document.getElementById('modal-year').textContent = item.year;
+        document.getElementById('modal-status').textContent = item.status || 'Completato';
+        document.getElementById('modal-location').textContent = item.details?.location || 'N/A';
+
+        // Tags
+        const tagsContainer = document.getElementById('modal-tags');
+        tagsContainer.innerHTML = (item.tags || []).map(tag => 
+            `<span class="tag">${tag}</span>`
+        ).join('');
+
+        // Setup gallery
+        this.setupGallery();
+    }
+
+    setupGallery() {
+        const thumbnailsContainer = document.getElementById('gallery-thumbnails');
+        const totalImagesSpan = document.getElementById('total-images');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+
+        // Clear thumbnails
+        thumbnailsContainer.innerHTML = '';
+        
+        if (this.currentImages.length === 0) {
+            // No images available
+            document.getElementById('main-image').style.display = 'none';
+            thumbnailsContainer.innerHTML = '<p style="color: var(--text-secondary); padding: 20px;">Nessuna immagine disponibile per questo progetto.</p>';
+            totalImagesSpan.textContent = '0';
+            prevBtn.disabled = true;
+            nextBtn.disabled = true;
+            return;
         }
+
+        // Set total images
+        totalImagesSpan.textContent = this.currentImages.length;
+
+        // Create thumbnails
+        this.currentImages.forEach((imagePath, index) => {
+            const thumbnail = document.createElement('div');
+            thumbnail.className = `thumbnail ${index === 0 ? 'active' : ''}`;
+            thumbnail.innerHTML = `<img src="${imagePath}" alt="Thumbnail ${index + 1}">`;
+            thumbnail.addEventListener('click', () => this.showImage(index));
+            thumbnailsContainer.appendChild(thumbnail);
+        });
+
+        // Show first image
+        this.showImage(0);
+        
+        // Update navigation buttons
+        this.updateNavigationButtons();
+    }
+
+    showImage(index) {
+        if (index < 0 || index >= this.currentImages.length) return;
+
+        this.currentImageIndex = index;
+        const mainImage = document.getElementById('main-image');
+        const currentImageSpan = document.getElementById('current-image');
+
+        // Update main image
+        mainImage.src = this.currentImages[index];
+        mainImage.style.display = 'block';
+        
+        // Update counter
+        currentImageSpan.textContent = index + 1;
+
+        // Update thumbnails
+        document.querySelectorAll('.thumbnail').forEach((thumb, i) => {
+            thumb.classList.toggle('active', i === index);
+        });
+
+        // Update navigation buttons
+        this.updateNavigationButtons();
+    }
+
+    updateNavigationButtons() {
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+
+        prevBtn.disabled = this.currentImageIndex <= 0;
+        nextBtn.disabled = this.currentImageIndex >= this.currentImages.length - 1;
+    }
+
+    prevImage() {
+        if (this.currentImageIndex > 0) {
+            this.showImage(this.currentImageIndex - 1);
+        }
+    }
+
+    nextImage() {
+        if (this.currentImageIndex < this.currentImages.length - 1) {
+            this.showImage(this.currentImageIndex + 1);
+        }
+    }
+
+    closeModal() {
+        if (!this.modal) return;
+
+        this.modal.classList.remove('active');
+        document.body.style.overflow = 'auto';
+        
+        setTimeout(() => {
+            this.modal.style.display = 'none';
+        }, 300);
     }
 
     getCategoryIcon(category) {
