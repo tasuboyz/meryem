@@ -3,9 +3,6 @@ class PortfolioManager {
     constructor() {
         this.portfolioGrid = document.getElementById('portfolio-grid');
         this.filterButtons = document.querySelectorAll('.filter-btn');
-        this.modal = document.getElementById('portfolio-modal');
-        this.modalOverlay = this.modal?.querySelector('.modal-overlay');
-        this.modalClose = this.modal?.querySelector('.modal-close');
         this.currentFilter = 'all';
         this.portfolioItems = [];
         
@@ -37,27 +34,31 @@ class PortfolioManager {
         card.dataset.id = item.id;
 
         // Determina l'icona in base alla categoria
-        let categoryIcon = '';
-        switch(item.category) {
-            case 'rendering':
-                categoryIcon = '🏢';
-                break;
-            case 'padiglioni':
-                categoryIcon = '🎪';
-                break;
-            case '3d':
-                categoryIcon = '🎨';
-                break;
-            default:
-                categoryIcon = '📐';
-        }
+        let categoryIcon = this.getCategoryIcon(item.category);
 
-        card.innerHTML = `
-            <div class="portfolio-image">
+        // Gestisci immagini reali se disponibili
+        let imageContent = '';
+        if (item.image && item.image.trim() !== '') {
+            imageContent = `
+                <img src="${item.image}" alt="${item.title}" class="portfolio-img" 
+                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="image-placeholder-portfolio" style="display: none;">
+                    <span class="icon">${categoryIcon}</span>
+                    <span class="text">Immagine progetto</span>
+                </div>
+            `;
+        } else {
+            imageContent = `
                 <div class="image-placeholder-portfolio">
                     <span class="icon">${categoryIcon}</span>
                     <span class="text">Immagine progetto</span>
                 </div>
+            `;
+        }
+
+        card.innerHTML = `
+            <div class="portfolio-image">
+                ${imageContent}
                 <div class="portfolio-overlay">
                     <div class="overlay-content">
                         <span class="overlay-icon">👁️</span>
@@ -70,7 +71,7 @@ class PortfolioManager {
                 <div class="portfolio-category">${this.getCategoryName(item.category)}</div>
                 <p class="portfolio-description">${item.description}</p>
                 <div class="portfolio-tags">
-                    ${item.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                    ${(item.tags || []).map(tag => `<span class="tag">${tag}</span>`).join('')}
                 </div>
             </div>
         `;
@@ -92,23 +93,12 @@ class PortfolioManager {
             });
         });
 
-        // Portfolio items click
+        // Portfolio items click - solo per mostrare info basilari
         this.portfolioGrid?.addEventListener('click', (e) => {
             const portfolioItem = e.target.closest('.portfolio-item');
             if (portfolioItem) {
                 const itemId = parseInt(portfolioItem.dataset.id);
-                this.openModal(itemId);
-            }
-        });
-
-        // Modal events
-        this.modalClose?.addEventListener('click', () => this.closeModal());
-        this.modalOverlay?.addEventListener('click', () => this.closeModal());
-        
-        // Keyboard events
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && this.modal?.classList.contains('active')) {
-                this.closeModal();
+                this.showProjectInfo(itemId);
             }
         });
     }
@@ -151,69 +141,35 @@ class PortfolioManager {
         activeButton.classList.add('active');
     }
 
-    openModal(itemId) {
+    showProjectInfo(itemId) {
         const item = portfolioData.find(p => p.id === itemId);
-        if (!item || !this.modal) return;
+        if (!item) return;
 
-        // Populate modal content
-        this.populateModal(item);
-        
-        // Show modal with animation
-        this.modal.style.display = 'flex';
-        document.body.style.overflow = 'hidden';
-        
-        requestAnimationFrame(() => {
-            this.modal.classList.add('active');
-        });
-    }
-
-    populateModal(item) {
-        const modalImage = document.getElementById('modal-image');
-        const modalTitle = document.getElementById('modal-title');
-        const modalCategory = document.getElementById('modal-category');
-        const modalDescription = document.getElementById('modal-description');
-        const modalTags = document.getElementById('modal-tags');
-
-        // Set placeholder image
-        if (modalImage) {
-            modalImage.style.display = 'none';
-            modalImage.parentElement.innerHTML = `
-                <div class="image-placeholder-portfolio" style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; background: var(--background-alt);">
-                    <span class="icon" style="font-size: 64px; margin-bottom: 15px;">${this.getCategoryIcon(item.category)}</span>
-                    <span class="text" style="color: var(--text-secondary);">Immagine del progetto</span>
-                </div>
-            `;
-        }
-
-        if (modalTitle) modalTitle.textContent = item.title;
-        if (modalCategory) modalCategory.textContent = this.getCategoryName(item.category);
-        if (modalDescription) modalDescription.textContent = item.fullDescription || item.description;
-        
-        if (modalTags) {
-            modalTags.innerHTML = item.tags.map(tag => 
-                `<span class="tag">${tag}</span>`
-            ).join('');
+        // Mostra una notifica con le info del progetto
+        if (typeof showNotification === 'function') {
+            const info = `${item.title} - ${item.details?.client || 'Cliente'} (${item.year}) - ${item.status}`;
+            showNotification(info, 'info');
+        } else {
+            // Fallback con alert se la funzione di notifica non è disponibile
+            alert(`${item.title}\n${item.description}\nCliente: ${item.details?.client || 'N/A'}\nAnno: ${item.year}\nStatus: ${item.status}`);
         }
     }
 
     getCategoryIcon(category) {
         switch(category) {
-            case 'rendering': return '🏢';
-            case 'padiglioni': return '🎪';
-            case '3d': return '🎨';
-            default: return '📐';
+            case 'rendering':
+                return '🏢';
+            case 'padiglioni':
+                return '🎪';
+            case '3d':
+                return '🎨';
+            case 'design':
+                return '✨';
+            case 'wip':
+                return '🚧';
+            default:
+                return '📐';
         }
-    }
-
-    closeModal() {
-        if (!this.modal) return;
-
-        this.modal.classList.remove('active');
-        document.body.style.overflow = 'auto';
-        
-        setTimeout(() => {
-            this.modal.style.display = 'none';
-        }, 300);
     }
 
     showFilterNotification() {

@@ -537,40 +537,6 @@ h1, h2, h3, h4, h5, h6 {
     margin: 0;
 }
 
-.experience-badge {
-    position: absolute;
-    top: -20px;
-    right: -20px;
-    background: var(--accent);
-    padding: 20px;
-    border-radius: 50%;
-    text-align: center;
-    box-shadow: var(--shadow-medium);
-    animation: pulse 2s ease-in-out infinite;
-}
-
-@keyframes pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-}
-
-.badge-number {
-    display: block;
-    font-size: 24px;
-    font-weight: 700;
-    color: white;
-    line-height: 1;
-}
-
-.badge-text {
-    display: block;
-    font-size: 10px;
-    color: white;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
 /* Services Section */
 .services {
     padding: 100px 0;
