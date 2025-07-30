@@ -230,8 +230,19 @@ class PortfolioManager {
             return;
         }
 
-        // Limit number of images shown (max 8 to maintain proportions)
-        const maxImages = 8;
+        // Adjust number of images based on screen size
+        const isMobile = window.innerWidth <= 768;
+        const isSmallMobile = window.innerWidth <= 480;
+        
+        let maxImages;
+        if (isSmallMobile) {
+            maxImages = 6; // Fewer images on very small screens
+        } else if (isMobile) {
+            maxImages = 8;
+        } else {
+            maxImages = 12; // More images on larger screens
+        }
+        
         const originalCount = this.currentImages.length;
         const imagesToShow = this.currentImages.slice(0, maxImages);
         
@@ -240,6 +251,13 @@ class PortfolioManager {
 
         // Set total images (show actual number being displayed)
         totalImagesSpan.textContent = imagesToShow.length;
+        
+        // Add class to thumbnails container based on number of images
+        if (imagesToShow.length > 6 && isMobile) {
+            thumbnailsContainer.classList.add('many-images');
+        } else {
+            thumbnailsContainer.classList.remove('many-images');
+        }
         
         // Create thumbnails
         imagesToShow.forEach((imagePath, index) => {
@@ -255,6 +273,11 @@ class PortfolioManager {
         
         // Update navigation buttons
         this.updateNavigationButtons();
+        
+        // Add touch/swipe support for mobile
+        if (isMobile) {
+            this.addSwipeSupport();
+        }
     }
 
     showImage(index) {
@@ -267,6 +290,23 @@ class PortfolioManager {
         // Update main image
         mainImage.src = this.currentImages[index];
         mainImage.style.display = 'block';
+        
+        // Check if image is portrait oriented and add appropriate styling
+        mainImage.onload = () => {
+            const aspectRatio = mainImage.naturalWidth / mainImage.naturalHeight;
+            const isPortrait = aspectRatio < 0.8; // More vertical than square
+            const isMobile = window.innerWidth <= 768;
+            
+            if (isPortrait && isMobile) {
+                mainImage.style.maxHeight = '85%';
+                mainImage.style.maxWidth = '90%';
+                mainImage.setAttribute('data-orientation', 'portrait');
+            } else {
+                mainImage.style.maxHeight = '100%';
+                mainImage.style.maxWidth = '100%';
+                mainImage.removeAttribute('data-orientation');
+            }
+        };
         
         // Update counter
         currentImageSpan.textContent = index + 1;
@@ -309,6 +349,60 @@ class PortfolioManager {
         setTimeout(() => {
             this.modal.style.display = 'none';
         }, 300);
+    }
+
+    addSwipeSupport() {
+        const galleryMain = document.querySelector('.gallery-main');
+        if (!galleryMain) return;
+
+        let startX = 0;
+        let startY = 0;
+        let isDragging = false;
+
+        const handleTouchStart = (e) => {
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+            isDragging = true;
+        };
+
+        const handleTouchMove = (e) => {
+            if (!isDragging) return;
+            
+            // Prevent scrolling while swiping
+            e.preventDefault();
+        };
+
+        const handleTouchEnd = (e) => {
+            if (!isDragging) return;
+            
+            const endX = e.changedTouches[0].clientX;
+            const endY = e.changedTouches[0].clientY;
+            const deltaX = endX - startX;
+            const deltaY = endY - startY;
+            
+            // Check if it's a horizontal swipe (and not a vertical scroll)
+            if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
+                if (deltaX > 0) {
+                    // Swipe right - previous image
+                    this.prevImage();
+                } else {
+                    // Swipe left - next image
+                    this.nextImage();
+                }
+            }
+            
+            isDragging = false;
+        };
+
+        // Remove existing listeners
+        galleryMain.removeEventListener('touchstart', handleTouchStart);
+        galleryMain.removeEventListener('touchmove', handleTouchMove);
+        galleryMain.removeEventListener('touchend', handleTouchEnd);
+
+        // Add touch event listeners
+        galleryMain.addEventListener('touchstart', handleTouchStart, { passive: true });
+        galleryMain.addEventListener('touchmove', handleTouchMove, { passive: false });
+        galleryMain.addEventListener('touchend', handleTouchEnd, { passive: true });
     }
 
     getCategoryIcon(category) {
