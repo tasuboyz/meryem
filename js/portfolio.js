@@ -221,7 +221,6 @@ class PortfolioManager {
         thumbnailsContainer.innerHTML = '';
         
         if (this.currentImages.length === 0) {
-            // No images available
             document.getElementById('main-image').style.display = 'none';
             thumbnailsContainer.innerHTML = '<p style="color: var(--text-secondary); padding: 20px;">Nessuna immagine disponibile per questo progetto.</p>';
             totalImagesSpan.textContent = '0';
@@ -230,36 +229,18 @@ class PortfolioManager {
             return;
         }
 
-        // Adjust number of images based on screen size
-        const isMobile = window.innerWidth <= 768;
-        const isSmallMobile = window.innerWidth <= 480;
-        
-        let maxImages;
-        if (isSmallMobile) {
-            maxImages = 6; // Fewer images on very small screens
-        } else if (isMobile) {
-            maxImages = 8;
-        } else {
-            maxImages = 12; // More images on larger screens
-        }
-        
-        const originalCount = this.currentImages.length;
+        // Limite fisso di 8 immagini
+        const maxImages = 8;
         const imagesToShow = this.currentImages.slice(0, maxImages);
-        
-        // Update the current images to only include limited images
         this.currentImages = imagesToShow;
-
-        // Set total images (show actual number being displayed)
         totalImagesSpan.textContent = imagesToShow.length;
         
-        // Add class to thumbnails container based on number of images
-        if (imagesToShow.length > 6 && isMobile) {
+        if (imagesToShow.length > 6) {
             thumbnailsContainer.classList.add('many-images');
         } else {
             thumbnailsContainer.classList.remove('many-images');
         }
         
-        // Create thumbnails
         imagesToShow.forEach((imagePath, index) => {
             const thumbnail = document.createElement('div');
             thumbnail.className = `thumbnail ${index === 0 ? 'active' : ''}`;
@@ -268,16 +249,8 @@ class PortfolioManager {
             thumbnailsContainer.appendChild(thumbnail);
         });
 
-        // Show first image
         this.showImage(0);
-        
-        // Update navigation buttons
         this.updateNavigationButtons();
-        
-        // Add touch/swipe support for mobile
-        if (isMobile) {
-            this.addSwipeSupport();
-        }
     }
 
     showImage(index) {
