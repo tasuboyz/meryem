@@ -2156,3 +2156,55 @@ h1, h2, h3, h4, h5, h6 {
         padding: 12px 15px;
     }
 }
+
+/* Tema scuro solo per la home */
+.hero.hero-dark {
+    background: linear-gradient(135deg, #181818 0%, #23272A 100%);
+    color: #fff;
+}
+.hero.hero-dark .hero-title,
+.hero.hero-dark .hero-subtitle,
+.hero.hero-dark .title-line {
+    color: #fff;
+}
+.hero.hero-dark .title-line.accent {
+    color: #FFD600;
+    text-shadow: 0 0 12px #FFD600, 0 0 32px #FFD60055;
+}
+.hero.hero-dark .btn-primary {
+    background: #FFD600;
+    color: #23272A;
+    box-shadow: 0 0 20px #FFD60055;
+}
+.hero.hero-dark .btn-primary:hover {
+    background: #CAAE4D;
+    color: #23272A;
+}
+.hero.hero-dark .btn-outline {
+    border-color: #FFD600;
+    color: #FFD600;
+}
+.hero.hero-dark .btn-outline:hover {
+    background: #FFD600;
+    color: #23272A;
+}
+.hero.hero-dark .particles .particle {
+    background: #FFD600;
+    opacity: 0.7;
+    box-shadow: 0 0 8px #FFD600, 0 0 24px #FFD60055;
+}
+.hero.hero-dark .floating-card {
+    background: #23272A;
+    color: #fff;
+    border: 1px solid #FFD60033;
+    box-shadow: 0 4px 32px #FFD60022;
+}
+.hero.hero-dark .floating-card .card-icon {
+    color: #FFD600;
+}
+.hero.hero-dark .floating-card h3 {
+    color: #FFD600;
+}
+.hero.hero-dark .floating-card p {
+    color: #fff;
+}
