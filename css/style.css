@@ -526,34 +526,59 @@ h1, h2, h3, h4, h5, h6 {
     margin: 0 auto;
 }
 
-.placeholder-image {
+.designer-photo {
     width: 300px;
     height: 400px;
-    background: var(--background-alt);
-    border: 2px dashed var(--border-color);
     border-radius: var(--border-radius);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
+    overflow: hidden;
+    box-shadow: var(--shadow-medium);
+    transition: var(--transition-fast);
+    position: relative;
+}
+
+.designer-photo::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, var(--accent-light) 0%, transparent 50%);
+    opacity: 0;
+    transition: var(--transition-fast);
+    z-index: 1;
+}
+
+.designer-photo:hover::before {
+    opacity: 0.3;
+}
+
+.designer-photo:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-strong);
+}
+
+.designer-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
     transition: var(--transition-fast);
 }
 
-.placeholder-image:hover {
-    border-color: var(--accent);
-    background: var(--accent-light);
+.designer-photo:hover .designer-img {
+    transform: scale(1.05);
 }
 
-.image-placeholder span {
-    font-size: 48px;
-    margin-bottom: 15px;
+/* Immagine designer per mobile - nascosta su desktop */
+.designer-photo-mobile {
+    display: none;
+    text-align: center;
+    margin: 40px 0;
 }
 
-.image-placeholder p {
-    color: var(--text-secondary);
-    font-size: 14px;
-    margin: 0;
+.designer-photo-mobile .designer-photo {
+    margin: 0 auto;
 }
 
 /* Services Section */
@@ -1884,6 +1909,21 @@ h1, h2, h3, h4, h5, h6 {
         text-align: center;
     }
 
+    /* Gestione foto designer in tablet */
+    .designer-photo-mobile {
+        display: block;
+    }
+
+    .about-image {
+        display: none;
+    }
+
+    .designer-photo {
+        width: 250px;
+        height: 300px;
+        margin: 0 auto 30px auto;
+    }
+
     .contact-content {
         grid-template-columns: 1fr;
         gap: 40px;
@@ -1906,6 +1946,27 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media (max-width: 768px) {
+    /* About section mobile optimization */
+    .about-content {
+        gap: 30px;
+        text-align: center;
+    }
+
+    /* Mostra immagine mobile e nascondi quella desktop */
+    .designer-photo-mobile {
+        display: block !important;
+    }
+
+    .about-image {
+        display: none !important;
+    }
+
+    .designer-photo-mobile .designer-photo {
+        width: 200px !important;
+        height: 260px !important;
+        margin: 0 auto !important;
+    }
+
     .services-grid {
         grid-template-columns: 1fr;
     }
